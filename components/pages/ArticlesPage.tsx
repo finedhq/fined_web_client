@@ -1,29 +1,28 @@
+'use client';
+
 import React, { useEffect, useState, useRef } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
 import instance from "../lib/axios"
-import { useAuth0 } from '@auth0/auth0-react'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import toast from 'react-hot-toast'
-import { FiMenu, FiX } from "react-icons/fi"
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+import { useRouter } from 'next/navigation';
+import { useUser } from '@auth0/nextjs-auth0';
 
 const ArticlesPage = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const router = useRouter()
 
-  const { user, isLoading, isAuthenticated, logout, loginWithPopup } = useAuth0()
+  const { user, isLoading } = useUser();
+  const isAuthenticated = !!user;
   const [role, setrole] = useState("")
 
   const [email, setEmail] = useState("")
-  const [articles, setArticles] = useState([])
-  const carouselRef1 = useRef(null)
-  const carouselRef2 = useRef(null)
+  const [articles, setArticles] = useState<any[]>([])
+  const carouselRef1 = useRef<HTMLDivElement | null>(null)
+  const carouselRef2 = useRef<HTMLDivElement | null>(null)
   const [canScrollLeft1, setCanScrollLeft1] = useState(false)
   const [canScrollRight1, setCanScrollRight1] = useState(false)
   const [canScrollLeft2, setCanScrollLeft2] = useState(false)
   const [canScrollRight2, setCanScrollRight2] = useState(false)
-  const [selectedArticle, setSelectedArticle] = useState(null)
+  const [selectedArticle, setSelectedArticle] = useState<any>(null)
   const [isArticleClosed, setIsArticleClosed] = useState(true)
   const [isFadingOut, setIsFadingOut] = useState(false)
   const selectedIndex = selectedArticle ? articles.findIndex(a => a.id === selectedArticle.id) : -1
@@ -55,7 +54,7 @@ const ArticlesPage = () => {
     }
   }, [isLoading, isAuthenticated]);
 
-  const checkScroll = (el, setLeft, setRight) => {
+  const checkScroll = (el: HTMLDivElement | null, setLeft: React.Dispatch<React.SetStateAction<boolean>>, setRight: React.Dispatch<React.SetStateAction<boolean>>) => {
     if (!el) return;
     const scrollLeft = el.scrollLeft;
     const maxScrollLeft = el.scrollWidth - el.clientWidth;
@@ -64,7 +63,7 @@ const ArticlesPage = () => {
     setRight(scrollLeft < maxScrollLeft - 2);
   };
 
-  const scrollLeft = (ref) => {
+  const scrollLeft = (ref: React.RefObject<HTMLDivElement | null>) => {
     const el = ref.current;
     if (el) {
       const width = el.getBoundingClientRect().width;
@@ -72,7 +71,7 @@ const ArticlesPage = () => {
     }
   };
 
-  const scrollRight = (ref) => {
+  const scrollRight = (ref: React.RefObject<HTMLDivElement | null>) => {
     const el = ref.current;
     if (el) {
       const width = el.getBoundingClientRect().width;
@@ -270,7 +269,7 @@ const ArticlesPage = () => {
     }
   }
 
-  const fetchArticleRating = async ({ email, articleId }) => {
+  const fetchArticleRating = async ({ email, articleId } : { email: string, articleId: string }) => {
     setFetchedArticleRating(null)
     setArticleRating(0)
     try {
@@ -290,7 +289,7 @@ const ArticlesPage = () => {
     }
   }
 
-  const saveArticleRating = async ({ email, articleId, rating }) => {
+  const saveArticleRating = async ({ email, articleId, rating } : { email: string, articleId: string, rating: number }) => {
     try {
       const res = await instance.post("/articles/rate", {
         email,
@@ -308,7 +307,7 @@ const ArticlesPage = () => {
     }
   }
 
-  const openArticle = async (article) => {
+  const openArticle = async (article: any) => {
     setSelectedArticle(article)
     setIsArticleClosed(false)
     setIsFadingOut(false)
@@ -323,7 +322,7 @@ const ArticlesPage = () => {
   }
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setIsSidebarOpen(false);
     };
     if (isSidebarOpen) {
@@ -338,15 +337,12 @@ const ArticlesPage = () => {
 
 
   return (
-    <div className="bg-gray-100 font-inter pb-5 text-[#1e1e1e] 2xl:max-w-[2500px] 2xl:mx-auto">
-
-      <Navbar />
-
+    <div className="bg-gray-100 font-inter pb-5 text-[#1e1e1e] 2xl:max-w-625 2xl:mx-auto">
       {isAuthenticated ?
         loading ?
           <div className="min-h-screen w-full p-4 sm:p-10 bg-gray-100 space-y-10 animate-pulse">
             <div className="flex flex-col sm:flex-row gap-10">
-              <div className="bg-gray-300 rounded-3xl shadow-md sm:w-1/2 h-[500px]"></div>
+              <div className="bg-gray-300 rounded-3xl shadow-md sm:w-1/2 h-125"></div>
               <div className="flex flex-col gap-8 sm:w-1/2">
                 <div className="h-6 bg-gray-300 rounded sm:w-2/3"></div>
                 <div className="h-4 bg-gray-300 rounded sm:w-1/2"></div>
@@ -428,9 +424,9 @@ const ArticlesPage = () => {
                     </button>
                   </div>
                 }
-                <div ref={carouselRef1} style={{ scrollbarWidth: 'none', overflowX: 'auto', columnGap: '0rem' }} className="h-72 sm:h-[500px] sm:w-11/12 columns-1 carousel-track-1 space-y-[22px] gap-2" >
+                <div ref={carouselRef1} style={{ scrollbarWidth: 'none', overflowX: 'auto', columnGap: '0rem' }} className="h-72 sm:h-125 sm:w-11/12 columns-1 carousel-track-1 space-y-5.5 gap-2" >
                   {articles.slice(1).map((article, index) =>
-                    <div onClick={() => openArticle(article)} key={index + 4} className="flex gap-4 sm:gap-6 cursor-pointer h-20 w-11/12 sm:h-36 sm:w-[630px]">
+                    <div onClick={() => openArticle(article)} key={index + 4} className="flex gap-4 sm:gap-6 cursor-pointer h-20 w-11/12 sm:h-36 sm:w-157.5">
                       <img src={article?.image_url || "_"} alt={`article_image_${index + 4}`} className="w-24 h-20 sm:w-40 sm:h-36 object-fill rounded-lg" />
                       <div>
                         <p className="text-[10px] sm:text-xs text-gray-400 sm:mb-1">{new Date(article?.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || ""}</p>
@@ -512,7 +508,7 @@ const ArticlesPage = () => {
                 </div>
               </div>
 
-              <div ref={carouselRef2} style={{ scrollbarWidth: 'none', overflowX: 'auto', columnGap: '0rem' }} className="max-h-[570px] columns-2 carousel-track-2 space-x-4" >
+              <div ref={carouselRef2} style={{ scrollbarWidth: 'none', overflowX: 'auto', columnGap: '0rem' }} className="max-h-142.5 columns-2 carousel-track-2 space-x-4" >
                 {articles.slice(3).map((article, index) =>
                   <div key={index + 4} onClick={() => openArticle(article)} className="flex gap-5 mb-6 p-4 cursor-pointer">
                     <img src={article?.image_url || "_"} alt={`article_image_${index + 4}`} className="w-33 h-32 rounded-md object-cover" />
@@ -577,9 +573,9 @@ const ArticlesPage = () => {
                   </button>
                 </div>
               }
-              <div ref={carouselRef1} style={{ scrollbarWidth: 'none', overflowX: 'auto', columnGap: '0rem' }} className="h-72 sm:h-[500px] sm:w-full columns-1 carousel-track-1 space-y-[22px] gap-2" >
+              <div ref={carouselRef1} style={{ scrollbarWidth: 'none', overflowX: 'auto', columnGap: '0rem' }} className="h-72 sm:h-125 sm:w-full columns-1 carousel-track-1 space-y-5.5 gap-2" >
                 {articles.slice(1).map((article, index) =>
-                  <div onClick={() => openArticle(article)} key={index + 4} className="flex gap-4 sm:gap-6 cursor-pointer h-20 w-11/12 sm:h-36 sm:w-[630px]">
+                  <div onClick={() => openArticle(article)} key={index + 4} className="flex gap-4 sm:gap-6 cursor-pointer h-20 w-11/12 sm:h-36 sm:w-157.5">
                     <img src={article?.image_url || "_"} alt={`article_image_${index + 4}`} className="w-24 h-20 sm:w-40 sm:h-36 object-fill rounded-lg" />
                     <div>
                       <p className="text-[10px] sm:text-xs text-gray-400 sm:mb-1">{new Date(article?.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || ""}</p>
@@ -661,7 +657,7 @@ const ArticlesPage = () => {
               </div>
             </div>
 
-            <div ref={carouselRef2} style={{ scrollbarWidth: 'none', overflowX: 'auto', columnGap: '0rem' }} className="max-h-[570px] columns-2 carousel-track-2 space-x-4" >
+            <div ref={carouselRef2} style={{ scrollbarWidth: 'none', overflowX: 'auto', columnGap: '0rem' }} className="max-h-142.5 columns-2 carousel-track-2 space-x-4" >
               {articles.slice(3).map((article, index) =>
                 <div key={index + 4} className="flex gap-5 mb-6 p-4 cursor-pointer">
                   <img src={article?.image_url || "_"} alt={`article_image_${index + 4}`} className="w-33 h-32 rounded-md object-cover" />
@@ -685,9 +681,6 @@ const ArticlesPage = () => {
           </div> */}
         </div>
       }
-
-      <Footer />
-
       {!isArticleClosed && (
         <div
           className={`fixed inset-0 z-20 bg-gray-100 flex items-center justify-center transition-opacity duration-500 ${isFadingOut ? "fade-out" : "fade-in"
@@ -793,14 +786,14 @@ ${(fetchedArticleRating !== null ? fetchedArticleRating : articleRating) >= star
       )}
       {warning && (
         <div className="fixed inset-0 z-20 bg-black/40 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-2xl shadow-xl w-[500px] space-y-4">
+          <div className="bg-white p-6 rounded-2xl shadow-xl w-125 space-y-4">
             <p className="text-xl font-bold text-red-600">⚠️ Alert</p>
             <p className="text-md font-semibold text-gray-700">
               {warning}
             </p>
             <div className="flex justify-end pt-4">
               <button
-                onClick={() => setWarning(false)}
+                onClick={() => setWarning('')}
                 className={`bg-amber-400 hover:bg-amber-500 transition-all duration-200 text-white px-4 py-2 rounded-lg ${isSaved ? "cursor-not-allowed" : "cursor-pointer"}`}
               >
                 Close
@@ -811,14 +804,14 @@ ${(fetchedArticleRating !== null ? fetchedArticleRating : articleRating) >= star
       )}
       {error && (
         <div className="fixed inset-0 z-20 bg-black/40 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-2xl shadow-xl w-[500px] space-y-4">
+          <div className="bg-white p-6 rounded-2xl shadow-xl w-125 space-y-4">
             <p className="text-xl font-bold text-red-600">⚠️ Alert</p>
             <p className="text-md font-semibold text-gray-700">
               {error}
             </p>
             <div className="flex justify-end pt-4">
               <button
-                onClick={() => { setError(false); setLoading(false); navigate("/home") }}
+                onClick={() => { setError(''); setLoading(false); router.push("/home") }}
                 className={`bg-amber-400 hover:bg-amber-500 transition-all duration-200 text-white px-4 py-2 rounded-lg ${isSaved ? "cursor-not-allowed" : "cursor-pointer"}`}
               >
                 Close

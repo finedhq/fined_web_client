@@ -1,31 +1,33 @@
-import { useAuth0 } from '@auth0/auth0-react'
+'use client';
+
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
 import instance from '../lib/axios'
 import toast from 'react-hot-toast'
 import { FiMenu, FiX } from "react-icons/fi"
-import Navbar from '../components/Navbar'
+import Navbar from '../uiComponents/Navbar'
+import { useRouter } from 'next/navigation'
+import { useUser } from '@auth0/nextjs-auth0'
 
 const Notifications = () => {
 
-    const navigate = useNavigate()
-    const location = useLocation()
+    const router = useRouter()
 
-    const { user, isLoading, isAuthenticated, logout } = useAuth0()
+    const { user, isLoading } = useUser()
+    const isAuthenticated = !!user;
     const [role, setrole] = useState("")
 
     const [email, setEmail] = useState("")
 
-    const [notifications, setNotifications] = useState([])
+    const [notifications, setNotifications] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated) {
-            navigate("/")
+            router.push("/")
         } else if (!isLoading && isAuthenticated) {
-            setEmail(user?.email)
+            setEmail(user.email || '')
             const roles = user?.["https://fined.com/roles"]
             setrole(roles?.[0] || "")
         }

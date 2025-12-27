@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const TeamSection = ({ team }) => (
+const TeamSection = ({ team }: any) => (
   <section className="my-12 py-8">
     <h2 className="text-3xl font-bold text-center mb-10">Meet the Team</h2>
-    {team.map((sector) => (
+    {team.map((sector: any) => (
       <div key={sector.sector} className="mb-12">
         <h3 className="text-2xl font-semibold mb-6 text-left capitalize">{sector.sector}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {sector.members.map((member) => (
+          {sector.members.map((member: any) => (
             <div key={member.name} className="bg-white rounded-xl shadow p-6 flex flex-col items-center w-full hover:shadow-lg transition-shadow">
               <img
                 src={`/${member.image}`}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useMessagesStore } from '../store/SBIStore';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+
+
 
 const ICICIYoungSavings = () => {
   const { getICICIYoungSavings, iciciyoungsavings } = useMessagesStore();

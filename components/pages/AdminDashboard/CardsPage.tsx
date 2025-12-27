@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import axios from '/src/lib/axios.js';
-import Loader from "../../components/Loader";
-import { useAuth0 } from "@auth0/auth0-react";
+import Link from 'next/link';
+import axios from '../../lib/axios.js';
+import Loader from "../../uiComponents/Loader";
+import { ParamValue } from 'next/dist/server/request/params';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@auth0/nextjs-auth0';
 
-const CardsPage = () => {
-  const { moduleId } = useParams();
-  const navigate = useNavigate();
-  const [cards, setCards] = useState([]);
+const CardsPage = ({ moduleId }: { moduleId: ParamValue }) => {
+
+  const router = useRouter();
+  const [cards, setCards] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-    const { user, isLoading, isAuthenticated, logout } = useAuth0()
+  const { user, isLoading } = useUser()
+  const isAuthenticated = !!user
   const [role, setrole] = useState("")
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      navigate("/")
+      router.push("/")
     } else if (!isLoading && isAuthenticated) {
       const roles = user?.["https://fined.com/roles"]
       setrole(roles?.[0] || "")
-      if (roles?.[0] !== "Admin") navigate("/")
+      if (roles?.[0] !== "Admin") router.push("/")
     }
   }, [isLoading, isAuthenticated])
 
@@ -37,7 +40,7 @@ const CardsPage = () => {
     fetchCards();
   }, [moduleId]);
 
-  const handleDeleteCard = async (id) => {
+  const handleDeleteCard = async (id: string) => {
     const res = await axios.delete(`/cards/${id}`)
     if (res) {
       setCards(prev => prev.filter(card => card.card_id !== id));
@@ -45,7 +48,7 @@ const CardsPage = () => {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-white to-blue-50 py-10 px-6">
+    <main className="min-h-screen bg-linear-to-br from-white to-blue-50 py-10 px-6">
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
           <div>
@@ -54,13 +57,13 @@ const CardsPage = () => {
           </div>
           <div className="flex gap-3">
             <Link
-              to="/admin"
+              href="/admin"
               className="px-4 py-2 text-sm bg-gray-100 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 transition"
             >
               ← Admin Home
             </Link>
             <button
-              onClick={() => navigate(`/admin/modules/${moduleId}/cards/add`)}
+              onClick={() => router.push(`/admin/modules/${moduleId}/cards/add`)}
               className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
             >
               + Add New Card
@@ -74,7 +77,7 @@ const CardsPage = () => {
           <div className="text-center mt-20">
             <p className="text-lg text-gray-500">No cards found for this module.</p>
             <button
-              onClick={() => navigate(`/admin/modules/${moduleId}/cards/add`)}
+              onClick={() => router.push(`/admin/modules/${moduleId}/cards/add`)}
               className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
             >
               Add First Card
@@ -126,7 +129,7 @@ const CardsPage = () => {
 
                     {(card.question_type === 'mcq_single' || card.question_type === 'mcq_multiple') && card.options?.length > 0 && (
                       <div className="space-y-1">
-                        {card.options.map((option, idx) => (
+                        {card.options.map((option: any, idx: number) => (
                           <label key={idx} className="block text-gray-600">
                             <input
                               type={card.question_type === 'mcq_single' ? 'radio' : 'checkbox'}

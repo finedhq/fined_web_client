@@ -1,11 +1,10 @@
+'use client';
+
 import React from "react";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 
 const PrivacyPolicy = () => {
   return (
     <div className="mx-auto bg-gray-100 pb-5">
-      <Navbar />
       <div className="p-6 max-w-4xl mx-auto my-5" >
       <h1 className="text-3xl font-bold mb-4">Privacy Policy</h1>
       <p className="mb-2">Effective Date: July 21, 2025</p>
@@ -65,7 +64,6 @@ const PrivacyPolicy = () => {
         By using FinEd, you agree to this Privacy Policy.
       </p>
       </div>
-      <Footer />
     </div>
   );
 };

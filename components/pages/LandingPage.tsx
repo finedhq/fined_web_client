@@ -6,7 +6,6 @@ import instance from "../lib/axios";
 import { useUser } from '@auth0/nextjs-auth0';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Footer from '../uiComponents/Footer';
 
 export default function LandingPage() {
   const { user, isLoading } = useUser();
@@ -207,57 +206,6 @@ export default function LandingPage() {
           }
         `}
       </style>
-      <header className="flex flex-col sm:flex-row justify-between items-center px-4 sm:px-10 lg:px-16 py-3 sm:py-6 bg-gray-100 shadow-sm">
-        <div className="flex items-center justify-between w-full sm:w-auto">
-          <div onClick={() => router.push('/')} className="flex flex-col items-center font-bold text-lg max-w-50 overflow-hidden whitespace-nowrap cursor-pointer">
-            <img
-              src="/logo.png"
-              alt="FinEd logo"
-              className="h-12 sm:h-14 w-auto object-contain"
-            />
-            <span className='text-[#4100bc] text-[10px] -mt-2' >Beta</span>
-          </div>
-          <button
-            className="sm:hidden text-gray-800 focus:outline-none p-2"
-            onClick={toggleSidebar}
-            aria-label="Toggle menu"
-          >
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={isSidebarOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}></path>
-            </svg>
-          </button>
-        </div>
-        <nav role="navigation" aria-label="Main navigation" className="hidden sm:flex flex-wrap items-center justify-center sm:justify-end gap-6 sm:gap-10">
-          <Link href="/courses" aria-label="View courses" className="text-gray-800 font-medium hover:text-blue-700 transition-colors duration-200 text-base sm:text-lg">Courses</Link>
-          <Link href="/articles" aria-label="View articles" className="text-gray-800 font-medium hover:text-blue-700 transition-colors duration-200 text-base sm:text-lg">Articles</Link>
-          <Link href="/about" aria-label="About us" className="text-gray-800 font-medium hover:text-blue-700 transition-colors duration-200 text-base sm:text-lg">About Us</Link>
-          <button onClick={loginWithPopup} className="px-5 py-2 bg-amber-400 text-white rounded-md   font-bold hover:bg-amber-500 transition-colors duration-200 text-base sm:text-lg cursor-pointer">Sign up / Login</button>
-        </nav>
-      </header>
-
-      <div className={`fixed inset-y-0 left-0 w-64 bg-gray-100 shadow-lg transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out sm:hidden z-50`}>
-        <div className="flex justify-between items-center p-5 border-b">
-          <span className="font-bold text-lg">Menu</span>
-          <button onClick={toggleSidebar} className="text-gray-800 focus:outline-none" aria-label="Close menu">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
-        </div>
-        <nav role="navigation" aria-label="Mobile navigation" className="flex flex-col p-5 space-y-5">
-          <Link href="/courses" aria-label="View courses" className="text-gray-800 font-medium hover:text-blue-700 transition-colors duration-200 text-lg" onClick={toggleSidebar}>Courses</Link>
-          <Link href="/articles" aria-label="View articles" className="text-gray-800 font-medium hover:text-blue-700 transition-colors duration-200 text-lg" onClick={toggleSidebar}>Articles</Link>
-          <Link href="/about" aria-label="About us" className="text-gray-800 font-medium hover:text-blue-700 transition-colors duration-200 text-lg" onClick={toggleSidebar}>About Us</Link>
-          <button onClick={() => { loginWithPopup(); toggleSidebar(); }} className="px-5 py-2 bg-amber-400 text-white rounded-lg font-bold hover:bg-amber-500 transition-colors duration-200 text-lg cursor-pointer">Sign up / Login</button>
-        </nav>
-      </div>
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-gray-100 bg-opacity-80 sm:hidden z-40"
-          onClick={toggleSidebar}
-          aria-hidden="true"
-        ></div>
-      )}
 
       <main className="flex flex-col lg:flex-row justify-between items-center px-6 sm:px-10 lg:px-16 py-12 sm:py-16 lg:py-20">
         <div className="max-w-full lg:max-w-xl mb-10 lg:mb-0">
@@ -479,9 +427,6 @@ export default function LandingPage() {
           </div>
         </div>
       )}
-
-      <Footer />
-
     </div>
   );
 }

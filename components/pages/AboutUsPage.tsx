@@ -1,19 +1,15 @@
+'use client';
+
 import React, { useEffect, useState } from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
 import instance from "../lib/axios"
-import { useAuth0 } from '@auth0/auth0-react'
 import toast from 'react-hot-toast'
-import { FiMenu, FiX } from "react-icons/fi"
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
-import TeamSection from "../components/TeamSection"
+import TeamSection from "../uiComponents/TeamSection"
+import { useUser } from "@auth0/nextjs-auth0";
 
 const AboutUs = () => {
 
-  const navigate = useNavigate()
-  const location = useLocation()
-
-  const { user, isLoading, isAuthenticated, logout, loginWithPopup } = useAuth0()
+  const { user, isLoading } = useUser()
+  const isAuthenticated = !!user;
   const [role, setrole] = useState("")
 
   const [email, setEmail] = useState("")
@@ -67,7 +63,7 @@ const AboutUs = () => {
     setIsSaved(true)
     try {
       await instance.post("/articles/saveemail", { email, enteredEmail })
-      setWarning("🎉 Subscribed successfully.")
+      toast.success("🎉 Subscribed successfully.")
       setIsEnteredEmail(true)
     } catch (err) {
       toast.error("❌ Failed to save email.")
@@ -80,7 +76,7 @@ const AboutUs = () => {
     setIsSaved(true)
     try {
       await instance.post("/articles/removeemail", { email, enteredEmail })
-      setWarning("Unsubscibed successfully.")
+      toast.success("Unsubscibed successfully.")
       setEnteredEmail("")
       setIsEnteredEmail(false)
     } catch (err) {
@@ -91,7 +87,7 @@ const AboutUs = () => {
   }
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setIsSidebarOpen(false);
     };
     if (isSidebarOpen) {
@@ -155,10 +151,7 @@ const AboutUs = () => {
 
   return (
     <div className="bg-gray-100 pb-5 h-full w-full flex flex-col">
-
-      <Navbar />
-
-      <div className="max-w-5xl text-base sm:text-lg self-center px-4 py-5 sm:px-0 sm:py-10 space-y-10" >
+      <div className="max-w-5xl text-base sm:text-lg self-center px-4 py-5 sm:px-0 sm:py-10 space-y-10 text-black" >
         {/* About Us Section */}
         <section className="flex flex-col md:flex-row items-center gap-6">
           <div className="flex-1 space-y-4">
@@ -260,9 +253,6 @@ const AboutUs = () => {
         <TeamSection team={team} />
 
       </div>
-
-      <Footer />
-
     </div>
   );
 };

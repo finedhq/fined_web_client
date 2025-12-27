@@ -1,28 +1,31 @@
+'use client';
+
 import React, { useEffect, useState } from "react";
 import instance from "../../lib/axios";
-import { useSearchParams, useNavigate } from "react-router-dom";
 import ArticlePage from "./ArticlePage";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useUser } from "@auth0/nextjs-auth0";
 
 const ArticlesList = () => {
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [articlesPerPage] = useState(10); // Matches backend default limit
   const [totalArticles, setTotalArticles] = useState(0);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-    const { user, isLoading, isAuthenticated, logout } = useAuth0()
+  const { user, isLoading } = useUser()
+  const isAuthenticated = !!user
   const [role, setrole] = useState("")
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      navigate("/")
+      router.push("/")
     } else if (!isLoading && isAuthenticated) {
       const roles = user?.["https://fined.com/roles"]
       setrole(roles?.[0] || "")
-      if (roles?.[0] !== "Admin") navigate("/")
+      if (roles?.[0] !== "Admin") router.push("/")
     }
   }, [isLoading, isAuthenticated])
 
@@ -31,12 +34,14 @@ const ArticlesList = () => {
     (article) => article.id.toString() === selectedId
   );
 
-  const openModal = (id) => {
-    setSearchParams({ article: id });
+  const openModal = (id: string) => {
+    router.push(`?article=${id}`, { scroll: false });
   };
 
   const closeModal = () => {
-    setSearchParams({});
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("article");
+    router.push(`?${params.toString()}`, { scroll: false });
   };
 
   useEffect(() => {
@@ -56,7 +61,7 @@ const ArticlesList = () => {
           : res.data.total || 0;
         setArticles(fetchedArticles);
         setTotalArticles(fetchedTotal);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Error fetching articles:", err.response?.data || err.message);
       } finally {
         setLoading(false);
@@ -79,7 +84,7 @@ const ArticlesList = () => {
     }
   };
 
-  const handleDeleteArticle = async (id) => {
+  const handleDeleteArticle = async (id: string) => {
     const res = await instance.delete(`/articles/${id}`)
     if (res) {
       setArticles(prev => prev.filter(article => article.id !== id));
@@ -91,7 +96,7 @@ const ArticlesList = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">All Articles</h2>
         <button
-          onClick={() => navigate("/admin")}
+          onClick={() => router.push("/admin")}
           className="text-blue-600 underline hover:text-blue-800 text-sm"
         >
           ← Back to Dashboard

@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "../lib/axios.js";
-import { Link } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+'use client';
 
-const CardForm = () => {
-  const { moduleId } = useParams();
+import React, { useState, useEffect } from "react";
+import axios from "../lib/axios.js";
+import Link from "next/link";
+import { ParamValue } from "next/dist/server/request/params.js";
+import { useRouter } from "next/navigation.js";
+import { useUser } from "@auth0/nextjs-auth0";
+
+const CardForm = ({ moduleId }: { moduleId: ParamValue }) => {
   const [cardType, setCardType] = useState('text');
   const [form, setForm] = useState({
     title: '',
@@ -23,22 +25,23 @@ const CardForm = () => {
     video_file: null,
   });
 
-  const navigate = useNavigate()
+  const router = useRouter()
 
-  const { user, isLoading, isAuthenticated, logout } = useAuth0()
+  const { user, isLoading } = useUser()
+  const isAuthenticated = !!user;
   const [role, setrole] = useState("")
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      navigate("/")
+      router.push("/")
     } else if (!isLoading && isAuthenticated) {
       const roles = user?.["https://fined.com/roles"]
       setrole(roles?.[0] || "")
-      if (roles?.[0] !== "Admin") navigate("/")
+      if (roles?.[0] !== "Admin") router.push("/")
     }
   }, [isLoading, isAuthenticated])
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -46,14 +49,14 @@ const CardForm = () => {
     }));
   };
 
-  const handleFileChange = (e, type) => {
+  const handleFileChange = (e: any, type: string) => {
     const file = e.target.files[0];
     if (file) {
       setForm((prev) => ({ ...prev, [`${type}_file`]: file }));
     }
   };
 
-  const handleCardTypeChange = (e) => {
+  const handleCardTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedType = e.target.value;
     setCardType(selectedType);
     setForm({
@@ -73,7 +76,7 @@ const CardForm = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData();
 
@@ -82,9 +85,9 @@ const CardForm = () => {
     data.append('content_text', form.content_text);
     data.append('question_type', form.question_type);
     data.append('correct_answer', form.correct_answer);
-    data.append('allotted_finstars', form.allotted_finstars);
-    data.append('order_index', form.order_index);
-    data.append('answer_compulsory', form.answer_compulsory);
+    data.append('allotted_finstars', form.allotted_finstars.toString());
+    data.append('order_index', form.order_index.toString());
+    data.append('answer_compulsory', String(form.answer_compulsory));
     data.append('feedback_type', form.feedback_type);
 
     if (
@@ -145,7 +148,7 @@ const CardForm = () => {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-2xl bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold mb-1">
-          <Link to="/admin" className="text-blue-600 hover:underline">← Admin</Link> / Add New Card
+          <Link href="/admin" className="text-blue-600 hover:underline">← Admin</Link> / Add New Card
         </h2>
         <p className="text-gray-500 text-sm mb-5">Module ID: {moduleId}</p>
 
@@ -212,7 +215,7 @@ const CardForm = () => {
                 name="content_text"
                 value={form.content_text}
                 onChange={handleChange}
-                rows="3"
+                rows={3}
                 className="w-full mt-1 border rounded px-3 py-2"
               />
             </label>

@@ -172,7 +172,7 @@ export default function Footer() {
 				</div>
 			</footer>
 
-			<p className="text-center justify-center w-full mt-10 my-5 text-xs 2xl:max-w-350 2xl:mx-auto">
+			<p className="text-center justify-center w-full py-10 text-xs 2xl:max-w-350 2xl:mx-auto bg-gray-100 text-black">
 				© Copyright {new Date().getFullYear()}, All Rights Reserved by FinEd.
 			</p>
 		</div>

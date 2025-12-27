@@ -3,9 +3,6 @@
 import React, { useEffect, useState } from "react";
 import instance from "../lib/axios";
 import toast from "react-hot-toast";
-import { FiMenu, FiX } from "react-icons/fi";
-import Navbar from "../uiComponents/Navbar";
-import Footer from "../uiComponents/Footer";
 import { useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/navigation";
 import { ParamValue } from "next/dist/server/request/params";
@@ -140,8 +137,6 @@ export default function CourseOverviewPage({ courseId }: { courseId: ParamValue 
 
   return (
     <div className="min-h-screen pb-5 bg-gray-100 overflow-x-hidden">
-      <Navbar />
-
       {loading ? (
         <div className="flex flex-col gap-8 items-center my-20">
           {[1, 2, 3].map((i) => (
@@ -219,9 +214,6 @@ export default function CourseOverviewPage({ courseId }: { courseId: ParamValue 
           ))}
         </div>
       )}
-
-      <Footer />
-
       {warning && (
         <div className="fixed inset-0 z-20 bg-black/40 flex items-center justify-center">
           <div className="bg-white p-6 rounded-2xl shadow-xl w-125 space-y-4">

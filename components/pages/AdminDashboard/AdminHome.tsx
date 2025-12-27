@@ -1,19 +1,22 @@
+'use client';
+
+import { useUser } from "@auth0/nextjs-auth0";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
 
 const AdminHome = () => {
-  const navigate = useNavigate();
-  const { user, isLoading, isAuthenticated, logout } = useAuth0()
+  const router = useRouter();
+  const { user, isLoading } = useUser()
+  const isAuthenticated = !!user;
   const [role, setrole] = useState("")
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      navigate("/")
+      router.push("/")
     } else if (!isLoading && isAuthenticated) {
       const roles = user?.["https://fined.com/roles"]
       setrole(roles?.[0] || "")
-      if (roles?.[0] !== "Admin") navigate("/")
+      if (roles?.[0] !== "Admin") router.push("/")
     }
   }, [isLoading, isAuthenticated])
 
@@ -21,27 +24,27 @@ const AdminHome = () => {
     {
       label: "Add New Course",
       icon: "📚",
-      onClick: () => navigate("/admin/courses/add"),
+      onClick: () => router.push("/admin/courses/add"),
     },
     {
       label: "Add New Article",
       icon: "📝",
-      onClick: () => navigate("/admin/articles/add"),
+      onClick: () => router.push("/admin/articles/add"),
     },
     {
       label: "View All Courses",
       icon: "📖",
-      onClick: () => navigate("/admin/courses"),
+      onClick: () => router.push("/admin/courses"),
     },
     {
       label: "View All Articles",
       icon: "📰",
-      onClick: () => navigate("/admin/articles"),
+      onClick: () => router.push("/admin/articles"),
     },
     {
       label: "Send Newsletter",
       icon: "📝",
-      onClick: () => navigate("/admin/newsletters"),
+      onClick: () => router.push("/admin/newsletters"),
     },
     {
       label: "Settings (Coming Soon)",
@@ -51,15 +54,15 @@ const AdminHome = () => {
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-100 flex flex-col items-center px-4 py-6">
+    <main className="min-h-screen bg-linear-to-br from-blue-100 to-indigo-100 flex flex-col items-center px-4 py-6">
       {/* Top Navigation */}
       <div className="w-full max-w-6xl flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
-          <img onClick={() => navigate('/')} src="/logo.png" alt="FinEd Logo" className="h-12 w-auto rounded-md cursor-pointer" />
+          <img onClick={() => router.push('/')} src="/logo.png" alt="FinEd Logo" className="h-12 w-auto rounded-md cursor-pointer" />
           <h2 className="text-2xl font-bold text-indigo-700">FinEd Admin Panel</h2>
         </div>
         <button
-          onClick={() => navigate("/home")}
+          onClick={() => router.push("/home")}
           className="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold border border-indigo-600 hover:bg-indigo-100 transition"
         >
           ← Back to Main Site

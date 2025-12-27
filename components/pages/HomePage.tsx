@@ -5,8 +5,6 @@ import instance from '../lib/axios'
 import toast from 'react-hot-toast'
 import FinScoreChart from '../uiComponents/finScoreChart'
 import { IoIosInformationCircleOutline } from "react-icons/io"
-import Navbar from '../uiComponents/Navbar'
-import Footer from '../uiComponents/Footer'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useUser } from '@auth0/nextjs-auth0';
 
@@ -178,7 +176,6 @@ const HomePage = () => {
 
   return (
     <div className="bg-gray-100 font-inter text-[#1e1e1e] pb-5 2xl:max-w-500 2xl:mx-auto">
-      <Navbar />
       {loading && !showLeaderBoard ? (
         <div className="p-4 animate-pulse space-y-6 2xl:max-w-350 2xl:mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 items-start pt-6">
@@ -392,9 +389,6 @@ const HomePage = () => {
           </div>
         </div>
       )}
-
-      <Footer />
-
       {
         warning && (
           <div className="fixed inset-0 z-20 bg-black/40 flex items-center justify-center">

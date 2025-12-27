@@ -4,8 +4,6 @@ import { FaArrowLeft } from "react-icons/fa"
 import React, { useEffect, useState } from 'react'
 import instance from '../lib/axios'
 import toast from 'react-hot-toast'
-import Navbar from '../uiComponents/Navbar'
-import Footer from '../uiComponents/Footer'
 import { useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/navigation";
 
@@ -56,7 +54,6 @@ const PoliciesPage = () => {
 
 	return (
 		<div className="min-h-screen bg-gray-100 px-4 pb-5 text-gray-800">
-			<Navbar />
 			<div className="max-w-5xl mx-auto py-10">
 				<div className="bg-amber-300 p-6 mb-8 rounded-b-3xl" >
 					<div className="flex items-center justify-between mb-4" >
@@ -124,7 +121,6 @@ const PoliciesPage = () => {
 					))}
 				</div>
 			</div>
-			<Footer />
 		</div>
 	);
 };

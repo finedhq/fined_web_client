@@ -1,11 +1,10 @@
+'use client';
+
 import React from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
 const TermsOfService = () => {
   return (
     <div className="mx-auto bg-gray-100 pb-5">
-      <Navbar />
       <div className="p-6 max-w-4xl mx-auto my-5" >
         <h1 className="text-3xl font-bold mb-4">Terms of Service</h1>
         <p className="mb-2">Effective Date: July 21, 2025</p>
@@ -54,7 +53,6 @@ const TermsOfService = () => {
           For questions, contact us at <strong>fined.personalfinance@gmail.com</strong>.
         </p>
       </div>
-      <Footer />
     </div>
   );
 };

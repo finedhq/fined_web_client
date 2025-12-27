@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import axios from "../lib/axios.js";
-import { Link } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import Link from "next/link";
+import { ParamValue } from "next/dist/server/request/params.js";
+import { useRouter } from "next/navigation.js";
+import { useUser } from "@auth0/nextjs-auth0";
 
-const ModuleForm = () => {
-  const { courseId } = useParams();
+const ModuleForm = ({ courseId }: { courseId: ParamValue }) => {
 
   const [form, setForm] = useState({
     title: '',
@@ -15,29 +15,30 @@ const ModuleForm = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate()
+  const router = useRouter()
 
-  const { user, isLoading, isAuthenticated, logout } = useAuth0()
+  const { user, isLoading } = useUser()
+  const isAuthenticated = !!user;
   const [role, setrole] = useState("")
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      navigate("/")
+      router.push("/")
     } else if (!isLoading && isAuthenticated) {
       const roles = user?.["https://fined.com/roles"]
       setrole(roles?.[0] || "")
-      if (roles?.[0] !== "Admin") navigate("/")
+      if (roles?.[0] !== "Admin") router.push("/")
     }
   }, [isLoading, isAuthenticated])
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
@@ -49,7 +50,7 @@ const ModuleForm = () => {
         description: '',
         order_index: '',
       });
-    } catch (err) {
+    } catch (err: any) {
       console.error("❌ Error adding module:", err.response?.data || err.message);
       alert("Failed to add module. Please try again.");
     } finally {
@@ -63,7 +64,7 @@ const ModuleForm = () => {
         <div className="mb-6 flex justify-between items-center">
           <h2 className="text-2xl font-bold text-indigo-700">Add New Module</h2>
           <Link
-            to="/admin"
+            href="/admin"
             className="text-sm text-blue-600 hover:underline"
           >
             ← Back to Admin
@@ -99,7 +100,7 @@ const ModuleForm = () => {
               name="description"
               id="description"
               placeholder="Brief description of the module..."
-              rows="4"
+              rows={4}
               value={form.description}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none resize-y"

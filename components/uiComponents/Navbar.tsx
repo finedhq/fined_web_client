@@ -145,9 +145,9 @@ export default function Navbar() {
 					<div
 						className={`fixed top-0 left-0 h-full w-64 bg-white shadow-xl transform transition-transform duration-300 z-50 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} xl:hidden`}
 					>
-						<div className="flex justify-between items-center p-4 border-b border-gray-200">
+						<div className="flex justify-between items-center p-4 border-b border-gray-200 text-black">
 							<h2 className="text-lg font-bold">Menu</h2>
-							<button onClick={toggleSidebar} className="text-2xl">
+							<button onClick={toggleSidebar} className="text-2xl text-black">
 								<FiX />
 							</button>
 						</div>
@@ -234,7 +234,7 @@ export default function Navbar() {
 						</nav>
 					</header>
 					<div className={`fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out sm:hidden z-50`}>
-						<div className="flex justify-between items-center p-5 border-b">
+						<div className="flex justify-between items-center p-5 border-b text-black">
 							<span className="font-bold text-lg">Menu</span>
 							<button onClick={toggleSidebar} className="text-gray-800 focus:outline-none" aria-label="Close menu">
 								<svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

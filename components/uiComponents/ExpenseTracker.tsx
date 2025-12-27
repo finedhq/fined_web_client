@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+'use client';
+
+import React, { SetStateAction, useEffect, useState } from "react"
 import instance from "../lib/axios"
 import ExpensesPieChart from './expenseChart'
 import SpendVsBudgetGauge from "./gaugeChart"
@@ -8,22 +9,24 @@ import FinancialSummaryBar from "./financialSummaryChart"
 import { GrNotes } from "react-icons/gr"
 import { RxCross2 } from "react-icons/rx"
 import { AiTwotoneDelete } from "react-icons/ai"
-import { useAuth0 } from '@auth0/auth0-react'
 import toast from "react-hot-toast"
 import Navbar from "./Navbar"
+import { useRouter } from "next/navigation";
+import { useUser } from "@auth0/nextjs-auth0";
 
 export default function ExpenseTracker() {
 
-  let navigate = useNavigate()
+  const router = useRouter()
 
-  const { user, isLoading, isAuthenticated, logout } = useAuth0()
+  const { user, isLoading } = useUser()
+  const isAuthenticated = !!user;
   const [role, setrole] = useState("")
 
   const [email, setEmail] = useState("")
   const [automatePopup, setAutomatePopup] = useState(false)
   const [isUnderstood, setIsUnderstood] = useState(false)
   const [isAutoFetch, setIsAutoFetch] = useState(true)
-  const [dbAtoFetch, setDbAutoFetch] = useState(null)
+  const [dbAtoFetch, setDbAutoFetch] = useState(true)
   const [isStatusChanged, setIsStatusChanged] = useState(false)
   const [isGmailConnected, setisGmailConnected] = useState(false)
   const [isBudgetEditing, setIsBudgetEditing] = useState(false)
@@ -41,10 +44,10 @@ export default function ExpenseTracker() {
 
   const [hasUnseen, setHasUnseen] = useState(false)
 
-  const [userCategories, setUserCategories] = useState([])
-  const [categoryExpenses, setCategoryExpenses] = useState([])
+  const [userCategories, setUserCategories] = useState<any[]>([])
+  const [categoryExpenses, setCategoryExpenses] = useState<any[] | null>([])
 
-  const [customCategoryIndex, setCustomCategoryIndex] = useState(null)
+  const [customCategoryIndex, setCustomCategoryIndex] = useState<number | null>(null)
   const [isCustomCategory, setIsCustomCategory] = useState(false)
   const [customFetchedCategoryIndex, setCustomFetchedCategoryIndex] = useState(null)
   const [isAddingTransaction, setIsAddingTransaction] = useState(false)
@@ -57,16 +60,16 @@ export default function ExpenseTracker() {
   })
   const [isSaving, setIsSaving] = useState(false)
 
-  const [fetchedTransactions, setFetchedTransactions] = useState([])
-  const [pieFetchedTransactions, setPieFetchedTransactions] = useState([])
-  const [recentFetchedTransactions, setRecentFetchedTransactions] = useState([])
+  const [fetchedTransactions, setFetchedTransactions] = useState<any[]>([])
+  const [pieFetchedTransactions, setPieFetchedTransactions] = useState<any[]>([])
+  const [recentFetchedTransactions, setRecentFetchedTransactions] = useState<any[]>([])
   const [seeAll, setSeeAll] = useState(false)
-  const [exceededBudgets, setExceededBudgets] = useState([])
+  const [exceededBudgets, setExceededBudgets] = useState<any[]>([])
   const [showExceededPopup, setShowExceededPopup] = useState(false)
   const [fetchingFromMails, setFetchingFromMails] = useState(false)
   const [bankEmail, setBankEmail] = useState("")
   const [isData, setIsData] = useState(false)
-  const [fetchedFromMails, setFetchedFromMails] = useState([])
+  const [fetchedFromMails, setFetchedFromMails] = useState<any[]>([])
 
   const [monthsRange, setMonthsRange] = useState(3)
   const [filterMonthforTransactions, setFilterMonthforTransactions] = useState(new Date().toLocaleString('default', { month: 'long' }))
@@ -76,7 +79,7 @@ export default function ExpenseTracker() {
   const [gaugeBudgets, setGaugeBudgets] = useState([])
 
   const [page, setPage] = useState(0)
-  const [newTransactions, setNewTransactions] = useState([])
+  const [newTransactions, setNewTransactions] = useState<any[]>([])
   const [hasMore, setHasMore] = useState(true)
 
   const [isFetching, setIsFetching] = useState(false)
@@ -89,9 +92,9 @@ export default function ExpenseTracker() {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      navigate("/")
+      router.push("/")
     } else if (!isLoading && isAuthenticated) {
-      setEmail(user.email)
+      setEmail(user.email || '')
       const roles = user?.["https://fined.com/roles"]
       setrole(roles?.[0] || "")
     }
@@ -160,7 +163,7 @@ export default function ExpenseTracker() {
       })
 
       const budgetsFromDB = res.data?.data || []
-      const exceeded = budgetsFromDB.filter(b => Number(b.limit) > 0 && Number(b.spent) > Number(b.limit))
+      const exceeded = budgetsFromDB.filter((b: any) => Number(b.limit) > 0 && Number(b.spent) > Number(b.limit))
 
       if (exceeded.length > 0) {
         setExceededBudgets(exceeded)
@@ -200,7 +203,7 @@ export default function ExpenseTracker() {
     try {
       const res = await instance.post("/fin-tools/expensetracker/fetchmonthlybudget", { email })
       setMonthlyBudget(res.data?.data?.[0] || {})
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error fetching monthly budget:", err.response?.data || err.message)
     }
   }
@@ -214,7 +217,7 @@ export default function ExpenseTracker() {
         monthsRange
       })
       setFetchedTransactions(res.data?.data || [])
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error fetching expenses:", err.response?.data || err.message)
     }
   }
@@ -239,7 +242,7 @@ export default function ExpenseTracker() {
     }
   }, [fetchedTransactions])
 
-  async function fetchPieOrRecentExpenses(targetMonth, setter) {
+  async function fetchPieOrRecentExpenses(targetMonth: string, setter: React.Dispatch<SetStateAction<any[]>>) {
     if (!email || !targetMonth) return
 
     try {
@@ -248,7 +251,7 @@ export default function ExpenseTracker() {
         month: targetMonth
       })
       setter(res.data?.data || [])
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error fetching expenses:", err.response?.data || err.message)
     } finally {
       setIsDataLoading(false)
@@ -267,7 +270,7 @@ export default function ExpenseTracker() {
     }
   }, [filterMonthforTransactions, email])
 
-  function handleBudgetChange(index, field, value) {
+  function handleBudgetChange(index: number, field: string, value: string) {
     const updated = budgets.map((b, i) => i === index ? { ...b, [field]: field === "category" ? value : value === "" ? "" : Number(value) } : b)
     setBudgets(updated)
   }
@@ -298,12 +301,12 @@ export default function ExpenseTracker() {
     }
 
     const updatedCategories = budgets.map(b => b.category)
-    const filteredSavedCategories = categoryExpenses.filter(
+    const filteredSavedCategories = categoryExpenses?.filter(
       saved => !updatedCategories.includes(saved.category)
     )
-    const totalSavedCategoryLimit = filteredSavedCategories.reduce(
+    const totalSavedCategoryLimit = filteredSavedCategories?.reduce(
       (acc, b) => acc + Number(b.limit), 0
-    )
+    ) || 0
     const newBudgetLimit = budgets.reduce(
       (acc, b) => acc + Number(b.limit || 0), 0
     )
@@ -383,7 +386,7 @@ export default function ExpenseTracker() {
     if (!container) return
 
     let isFetching = false
-    let timeoutId
+    let timeoutId: any = null
 
     const handleScroll = () => {
       if (isFetching) return
@@ -413,7 +416,7 @@ export default function ExpenseTracker() {
     setCategoryExpenses(null)
   }
 
-  function handleMonthlyBudgetChange(field, value) {
+  function handleMonthlyBudgetChange(field: string, value: string) {
     setMonthlyBudget(prev => ({
       ...prev,
       [field]: value === "" ? "" : Number(value)
@@ -520,7 +523,7 @@ export default function ExpenseTracker() {
     }
   }
 
-  async function handleCheckAndFetch(showNotice) {
+  async function handleCheckAndFetch(showNotice?: boolean) {
     try {
       setIsFetching(true)
       const res = await instance.post("/fin-tools/expensetracker/checkandfetch", { email })
@@ -537,7 +540,7 @@ export default function ExpenseTracker() {
         }
       }
       setIsFetching(false)
-    } catch (err) {
+    } catch (err: any) {
       if (!showNotice) {
         if (err.response?.status === 401) {
           const state = JSON.stringify({ email, status: isAutoFetch })
@@ -557,7 +560,7 @@ export default function ExpenseTracker() {
     }
   }, [dbAtoFetch])
 
-  function updateFetchedTransactionField(index, field, value) {
+  function updateFetchedTransactionField(index: number, field: string, value: string) {
     const updated = [...fetchedFromMails]
     updated[index] = {
       ...updated[index],
@@ -566,7 +569,7 @@ export default function ExpenseTracker() {
     setFetchedFromMails(updated)
   }
 
-  async function handleDeleteTransaction(transactionId) {
+  async function handleDeleteTransaction(transactionId: any) {
     setIsFetching(true)
     try {
       await instance.post("/fin-tools/expensetracker/deleteTransaction", {
@@ -669,7 +672,7 @@ export default function ExpenseTracker() {
                 <div className="w-40 h-6 bg-gray-300 rounded-md"></div>
                 <div className="w-28 h-8 bg-gray-300 rounded-md"></div>
               </div>
-              <div className="space-y-4 max-h-[650px] overflow-y-scroll pr-2">
+              <div className="space-y-4 max-h-162.5 overflow-y-scroll pr-2">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="space-y-2 border-b border-gray-200 pb-2">
                     <div className="flex justify-between items-center">
@@ -731,7 +734,7 @@ export default function ExpenseTracker() {
                     ))}
                   </select>
                 </div>
-                <div className="space-y-4 max-h-[650px] overflow-y-scroll px-4">
+                <div className="space-y-4 max-h-162.5 overflow-y-scroll px-4">
                   {recentFetchedTransactions.length > 0 ? (
                     recentFetchedTransactions.map((transaction, index) => (
                       <div key={index} className="space-y-1 border-b border-gray-200 pb-2">
@@ -858,7 +861,7 @@ export default function ExpenseTracker() {
           )}
           {isBudgetEditing &&
             <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/30">
-              <div className="bg-white p-6 rounded-2xl shadow-xl w-[600px] max-h-[90vh] overflow-y-auto space-y-6">
+              <div className="bg-white p-6 rounded-2xl shadow-xl w-150 max-h-[90vh] overflow-y-auto space-y-6">
                 <div className="flex justify-between items-center" >
                   <p className="text-md sm:text-2xl font-bold text-violet-800">Set Budget Goals</p>
                   {isMonthlyBudgetEditing ?
@@ -873,7 +876,7 @@ export default function ExpenseTracker() {
                     <p className="text-lg font-semibold mb-6" >Month: {new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}</p>
                     <div>
                       <p className="text-md font-semibold mb-1">Limit</p>
-                      <input autoFocus type="number" placeholder="Enter limit" value={monthlyBudget.limit ?? ""} onChange={(e) => handleMonthlyBudgetChange("limit", e.target.value)} onWheel={(e) => e.target.blur()} className="w-full border rounded-lg px-3 py-2 text-sm outline-violet-700" />
+                      <input autoFocus type="number" placeholder="Enter limit" value={monthlyBudget.limit ?? ""} onChange={(e) => handleMonthlyBudgetChange("limit", e.target.value)} onWheel={(e) => (e.target as HTMLElement).blur()} className="w-full border rounded-lg px-3 py-2 text-sm outline-violet-700" />
                     </div>
                     <button onClick={saveBudget} className="bg-blue-600 hover:bg-blue-700 transition-all duration-200 text-white font-semibold px-4 py-2 rounded-lg cursor-pointer mt-6 self-center" >Save Budget</button>
                   </div>
@@ -951,7 +954,7 @@ export default function ExpenseTracker() {
                               placeholder="Enter limit"
                               value={budget.limit ?? ""}
                               onChange={(e) => handleBudgetChange(index, "limit", e.target.value)}
-                              onWheel={(e) => e.target.blur()}
+                              onWheel={(e) => (e.target as HTMLElement).blur()}
                               className="w-full border rounded-lg px-3 py-2 text-sm outline-violet-700"
                             />
                             <p className="text-sm mt-4 text-gray-700">Spent: ₹{spent}</p>
@@ -975,7 +978,7 @@ export default function ExpenseTracker() {
           }
           {isAddingTransaction &&
             <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/30">
-              <div className="bg-white p-6 rounded-2xl shadow-xl w-[600px] max-h-[90vh] overflow-y-auto space-y-6">
+              <div className="bg-white p-6 rounded-2xl shadow-xl w-150 max-h-[90vh] overflow-y-auto space-y-6">
                 <div className="flex justify-between items-center">
                   <p className="text-2xl font-bold text-violet-800">Add Transaction</p>
                   {/* <div className="flex justify-end">
@@ -1076,7 +1079,7 @@ export default function ExpenseTracker() {
                   </div>
                   <div>
                     <p className="text-md font-semibold mb-1">Amount</p>
-                    <input type="number" value={transaction.amount} onChange={(e) => setTransaction(prev => ({ ...prev, amount: e.target.value }))} placeholder="Enter amount" onWheel={(e) => e.target.blur()} className="w-full border rounded-lg px-3 py-2 text-sm outline-violet-700" />
+                    <input type="number" value={transaction.amount} onChange={(e) => setTransaction(prev => ({ ...prev, amount: e.target.value }))} placeholder="Enter amount" onWheel={(e) => (e.target as HTMLElement).blur()} className="w-full border rounded-lg px-3 py-2 text-sm outline-violet-700" />
                   </div>
                   <div>
                     <p className="text-md font-semibold mb-1">Date</p>
@@ -1101,7 +1104,7 @@ export default function ExpenseTracker() {
           }
           {seeAll &&
             <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/30">
-              <div className="bg-white p-6 rounded-2xl shadow-xl w-[600px] max-h-[90vh] overflow-y-auto space-y-6">
+              <div className="bg-white p-6 rounded-2xl shadow-xl w-150 max-h-[90vh] overflow-y-auto space-y-6">
                 <div className="flex justify-between items-center">
                   <p className="text-2xl font-bold text-violet-800">All Transactions</p>
                   <RxCross2 onClick={() => setSeeAll(false)} className="text-3xl cursor-pointer" />
@@ -1142,9 +1145,9 @@ export default function ExpenseTracker() {
           }
           {showExceededPopup && (
             <div className="fixed inset-0 z-20 bg-black/40 flex items-center justify-center">
-              <div className="bg-white p-6 rounded-2xl shadow-xl w-[500px] space-y-4">
+              <div className="bg-white p-6 rounded-2xl shadow-xl w-125 space-y-4">
                 <p className="text-xl font-bold text-red-600">⚠️ Budget Limit Exceeded</p>
-                <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                <div className="space-y-2 max-h-75 overflow-y-auto">
                   {exceededBudgets.map((b, i) => (
                     <p key={i} className="text-sm text-gray-700">
                       • <strong>{b.category}</strong>: Spent ₹{b.spent} / Limit ₹{b.limit}
@@ -1164,7 +1167,7 @@ export default function ExpenseTracker() {
           )}
           {/* {fetchingFromMails && (
             <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/30">
-              <div className="bg-white p-6 rounded-2xl shadow-xl w-[500px] space-y-4">
+              <div className="bg-white p-6 rounded-2xl shadow-xl w-125 space-y-4">
                 <div className="flex justify-between items-center">
                   <p className="text-2xl font-bold text-violet-800">Link Bank Gmail</p>
                   <RxCross2 onClick={() => setFetchingFromMails(false)} className="text-3xl cursor-pointer" />
@@ -1322,14 +1325,14 @@ export default function ExpenseTracker() {
           )} */}
           {warning && (
             <div className="fixed inset-0 z-20 bg-black/40 flex items-center justify-center">
-              <div className="bg-white p-6 rounded-2xl shadow-xl w-[500px] space-y-4">
+              <div className="bg-white p-6 rounded-2xl shadow-xl w-125 space-y-4">
                 <p className="text-xl font-bold text-red-600">⚠️ Warning</p>
                 <p className="text-md font-semibold text-gray-700">
                   {warning}
                 </p>
                 <div className="flex justify-end pt-4">
                   <button
-                    onClick={() => setWarning(false)}
+                    onClick={() => setWarning('')}
                     className="bg-violet-700 hover:bg-violet-800 transition-all duration-200 text-white px-4 py-2 rounded-lg cursor-pointer"
                   >
                     Close

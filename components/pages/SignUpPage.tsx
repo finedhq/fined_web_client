@@ -1,11 +1,10 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+'use client';
 
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
 const SignUpPage = () => {
-  const navigate = useNavigate();
-  const {loginWithPopup}=useAuth0();
+  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,7 +14,11 @@ const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
+  const loginWithPopup = () => {
+    router.push(`/auth/login`);
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setError('');
@@ -34,18 +37,18 @@ const SignUpPage = () => {
 
     setTimeout(() => {
       setLoading(false);
-      navigate('/home');
+      router.push('/home');
     }, 1000);
   };
 
   return (
     <div className="font-sans bg-gray-50 py-10"> 
       <div className="w-full max-w-md mx-auto bg-white rounded-2xl p-10 shadow-lg text-center relative"> 
-        <button className="absolute top-5 left-5 bg-transparent border-none text-2xl cursor-pointer text-gray-600" onClick={() => navigate(-1)}>
+        <button className="absolute top-5 left-5 bg-transparent border-none text-2xl cursor-pointer text-gray-600" onClick={() => router.back()}>
           ←
         </button>
 
-        <img onClick={() => navigate('/')} src="/logo.png" alt="FinEd Logo" className="w-24 mx-auto my-5 cursor-pointer" /> 
+        <img onClick={() => router.push('/')} src="/logo.png" alt="FinEd Logo" className="w-24 mx-auto my-5 cursor-pointer" /> 
 
         <button className="w-11/12 py-2.5 px-4 mx-auto my-2.5 rounded-full cursor-pointer border border-black transition-colors duration-300 flex items-center justify-center bg-white max-w-sm hover:bg-gray-100" onClick={loginWithPopup}> {/* .social-btn */}
           <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook" className="w-6 h-6 mr-2" /> 
@@ -58,9 +61,9 @@ const SignUpPage = () => {
         </button>
 
         <div className="flex items-center justify-center my-5 text-sm text-gray-500"> 
-          <span className="flex-grow h-px bg-gray-400 mx-3"></span>
+          <span className="grow h-px bg-gray-400 mx-3"></span>
           <span>OR</span>
-          <span className="flex-grow h-px bg-gray-400 mx-3"></span> 
+          <span className="grow h-px bg-gray-400 mx-3"></span> 
         </div>
 
         <form className="flex flex-col pb-3" onSubmit={handleSubmit}> 
@@ -117,7 +120,7 @@ const SignUpPage = () => {
         </div>
 
         
-        <button className="w-11/12 py-2.5 px-4 mx-auto my-2.5 text-base font-bold rounded-full cursor-pointer mt-5 transition-colors duration-300 ease-in-out bg-white text-black border border-black hover:bg-gray-200" onClick={() => navigate('/signin')}>
+        <button className="w-11/12 py-2.5 px-4 mx-auto my-2.5 text-base font-bold rounded-full cursor-pointer mt-5 transition-colors duration-300 ease-in-out bg-white text-black border border-black hover:bg-gray-200" onClick={() => router.push('/signin')}>
           Log In
         </button>
       </div>
