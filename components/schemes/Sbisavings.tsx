@@ -5,7 +5,7 @@ import { useMessagesStore } from '../store/SBIStore';
 
 const ProductList = () => {
   const { getSBISavings, savings } = useMessagesStore();
-  const [activeTab, setActiveTab] = useState({});
+  const [activeTab, setActiveTab] = useState<{ [key: number]: string }>({});
 
   useEffect(() => {
      getSBISavings();
@@ -13,7 +13,7 @@ const ProductList = () => {
 
   const tabNames = ['Know Before You Invest', 'Key Features', 'Eligibility'];
 
-  const getTabContent = (product, tab) => {
+  const getTabContent = (product: { [key: string]: any }, tab: string) => {
     switch (tab) {
       case 'Know Before You Invest':
         return product.description;
@@ -44,8 +44,7 @@ const ProductList = () => {
 
   return (
     <div className="w-screen min-h-screen bg-gray-100 p-6">
-      <Navbar />
-      {savings.map((product, index) => {
+      {savings.map((product, index: number) => {
         const selectedTab = activeTab[index] || tabNames[0];
         return (
           <div
@@ -110,7 +109,6 @@ const ProductList = () => {
           </div>
         );
       })}
-      <Footer />
     </div>
   );
 };

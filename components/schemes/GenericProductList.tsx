@@ -1,18 +1,44 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { useMessagesStore } from '../store/SBIStore';
+import { useMessagesStore } from '../store/SBIStore'; // Adjust path
 
-const FDList = () => {
-  const { getSBIfd, fd } = useMessagesStore();
+// Helper types to make TypeScript happy with dynamic keys
+type StoreState = ReturnType<typeof useMessagesStore.getState>;
+
+interface GenericListProps {
+  dataKey: keyof StoreState;   // e.g., 'fd', 'savings'
+  fetchKey: keyof StoreState;  // e.g., 'getSBIfd', 'getSBISavings'
+}
+
+const GenericProductList = ({ dataKey, fetchKey }: GenericListProps) => {
+  // 1. Dynamic Selection: We select the specific slice of the store based on props
+  const productList = useMessagesStore((state) => state[dataKey]);
+  const fetchData = useMessagesStore((state) => state[fetchKey]);
+
+  // Type assertion because Zustand selector might return unknown for dynamic keys
+  // We tell TS: "Trust me, this data is a list of BankProducts"
+  const products = (Array.isArray(productList) ? productList : []) as { [key: string]: any }[];
+  
+  // We tell TS: "Trust me, this function is an async fetcher with NO arguments"
+  const fetchAction = fetchData as () => Promise<void>;
+
   const [activeTab, setActiveTab] = useState<{ [key: number]: string }>({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getSBIfd();
-  }, []);
+    // Call the specific fetch function for this route
+    const load = async () => {
+      setLoading(true);
+      await fetchAction();
+      setLoading(false);
+    };
+    load();
+  }, [fetchAction]);
 
   const tabNames = ['Know Before You Invest', 'Key Features', 'Eligibility'];
 
+  // ... (Keep your getTabContent logic exactly as is)
   const getTabContent = (product: { [key: string]: any }, tab: string) => {
     switch (tab) {
       case 'Know Before You Invest':
@@ -42,9 +68,11 @@ const FDList = () => {
     }
   };
 
+  if (loading) return <div className="p-10 text-center">Loading...</div>;
+
   return (
-    <div className="w-screen min-h-screen bg-gray-100 p-6">
-      {fd.map((product, index: number) => {
+    <div className="w-full min-h-screen bg-gray-100 p-6">
+      {products.map((product, index) => {
         const selectedTab = activeTab[index] || tabNames[0];
         return (
           <div
@@ -61,8 +89,8 @@ const FDList = () => {
                     key={tab}
                     onClick={() => setActiveTab({ ...activeTab, [index]: tab })}
                     className={`text-left px-4 py-2 rounded-md font-medium ${selectedTab === tab
-                        ? 'bg-yellow-400 text-black shadow-sm'
-                        : 'hover:bg-gray-200 text-blue-700'
+                      ? 'bg-yellow-400 text-black shadow-sm'
+                      : 'hover:bg-gray-200 text-blue-700'
                       }`}
                   >
                     {tab}
@@ -112,4 +140,4 @@ const FDList = () => {
   );
 };
 
-export default FDList;
+export default GenericProductList;

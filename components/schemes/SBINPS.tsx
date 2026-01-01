@@ -5,7 +5,7 @@ import { useMessagesStore } from '../store/SBIStore';
 
 const NPSList = () => {
   const { getSBInps, nps } = useMessagesStore();
-  const [activeTab, setActiveTab] = useState({});
+  const [activeTab, setActiveTab] = useState<{ [key: number]: string }>({});
 
   useEffect(() => {
      getSBInps();
@@ -13,7 +13,7 @@ const NPSList = () => {
 
   const tabNames = ['Know Before You Invest', 'Key Features', 'Eligibility'];
 
-  const getTabContent = (product, tab) => {
+  const getTabContent = (product: { [key: string]: any }, tab: string) => {
     switch (tab) {
       case 'Know Before You Invest':
         return product.description;
@@ -44,7 +44,6 @@ const NPSList = () => {
 
   return (
     <div className="w-screen min-h-screen bg-gray-100 p-6">
-      <Navbar />
       {nps.map((product, index) => {
         const selectedTab = activeTab[index] || tabNames[0];
         return (
@@ -110,7 +109,6 @@ const NPSList = () => {
           </div>
         );
       })}
-      <Footer />
     </div>
   );
 };

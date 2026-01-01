@@ -61,7 +61,7 @@ export default function Navbar() {
 	return (
 		<div>
 			{isAuthenticated ?
-				<header className="flex flex-col md:flex-row md:items-center h-auto md:h-15.75 bg-gray-100 box-border mb-4">
+				<header className="flex flex-col md:flex-row md:items-center h-auto md:h-15.75 bg-[#f7fafc] box-border mb-4">
 					{/* Mobile and Tablet Header */}
 					<div className="flex justify-between items-center w-full mt-4 xl:hidden px-4">
 						<div onClick={() => router.push('/')} className="flex flex-col items-center font-bold text-lg max-w-45 overflow-hidden whitespace-nowrap cursor-pointer">
@@ -206,7 +206,7 @@ export default function Navbar() {
 				</header>
 				:
 				<div>
-					<header className="flex flex-col sm:flex-row justify-between items-center px-4 sm:px-10 lg:px-16 py-3 sm:py-6 bg-gray-100">
+					<header className="flex flex-col sm:flex-row justify-between items-center px-4 sm:px-10 lg:px-16 py-3 sm:py-6 bg-[#f7fafc]">
 						<div className="flex items-center justify-between w-full sm:w-auto mb-4 sm:mb-0">
 							<div onClick={() => router.push('/')} className="flex flex-col items-center font-bold text-lg max-w-50 overflow-hidden whitespace-nowrap cursor-pointer">
 								<img
