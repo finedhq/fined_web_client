@@ -7,6 +7,7 @@ import FinScoreChart from '../uiComponents/finScoreChart'
 import { IoIosInformationCircleOutline } from "react-icons/io"
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useUser } from '@auth0/nextjs-auth0';
+import SmartImage from '../uiComponents/SmartImage';
 
 const HomePage = () => {
 
@@ -205,27 +206,33 @@ const HomePage = () => {
               <section className="bg-[#4E00E3] p-4 h-48.5 rounded-2xl text-white text-center flex flex-col justify-center items-center gap-4">
                 <div>
                   <div className="relative w-18.75 h-18.75 mx-auto">
-                    <img
-                      src={user?.picture}
-                      onError={(e) => { e.currentTarget.src = "/profile.png" }}
+                    <SmartImage
+                      src={user?.picture || "/profile.png"}
+                      width={75}
+                      height={75}
                       alt="Profile"
-                      className="w-18.75 h-18.75 object-cover rounded-full border-2 border-gray-300"
+                      className='object-cover'
+                      containerClassName="w-18.75 h-18.75 rounded-full border-2 border-gray-300"
                     />
-                    <img
-                      src="edit.png"
-                      className="absolute bottom-0 right-0 w-5 h-5 rounded-full border-2 border-white bg-gray-200 p-1"
-                      alt="Edit"
-                    />
+                    <div className="absolute bottom-0 right-0 w-5 h-5 cursor-pointer z-20">
+                      <SmartImage
+                        src="/edit.png"
+                        alt="Edit"
+                        fill
+                        className="object-contain p-1 rounded-full"
+                        containerClassName="rounded-full border-2 border-white bg-gray-200 w-full h-full"
+                      />
+                    </div>
                   </div>
                   <h3 className="mt-1 text-base sm:text-lg font-semibold text-white text-center">{user?.name}</h3>
                 </div>
                 <div className="flex justify-center gap-4 sm:gap-10">
                   <div title="FinStars are earned by completing tasks like reading articles, completing modules, and logging expenses." className="bg-white px-3 py-2 w-20 rounded-full flex items-center justify-center gap-4 font-semibold shadow-sm text-gray-900">
-                    <img src="/star.png" alt="fin-stars" className="w-5 h-5" />
+                    <SmartImage src="/star.png" alt="fin-stars" width={20} height={20} className="w-5 h-5" />
                     <p>{userData?.fin_stars}</p>
                   </div>
                   <div title={`🔥 Current Streak: You've been active for ${userData?.streak_count || 0} day${userData?.streak_count === 1 ? '' : 's'} in a row.`} className="bg-white px-3 py-2 w-20 rounded-full flex items-center justify-center gap-4 font-semibold shadow-sm text-gray-900">
-                    <img src="/flame.png" alt="streak" className="w-6 h-5" />
+                    <SmartImage src="/flame.png" alt="streak" width={24} height={20} className="w-6 h-5" />
                     <p>{userData?.streak_count}</p>
                   </div>
                   <div
@@ -233,18 +240,22 @@ const HomePage = () => {
                     onClick={() => setShowLeaderBoard(true)}
                     className="bg-white px-3 py-2 w-20 rounded-full flex items-center justify-center gap-4 font-semibold shadow-sm text-gray-900 cursor-pointer"
                   >
-                    <img src="/badge.png" alt="leaderboard" className="w-5 h-5" />
+                    <SmartImage src="/badge.png" alt="leaderboard" width={20} height={20} className="w-5 h-5" />
                     <p>{userData?.rank}</p>
                   </div>
                 </div>
               </section>
 
               <section className="flex items-center bg-white rounded-2xl p-2 gap-4 border border-gray-300 mt-4">
-                <img
-                  src={ongoingCourse?.thumbnail_url || recommendedCourses[recommendedCourses.length - 1]?.thumbnail_url}
-                  alt="Course"
-                  className="w-30 sm:w-35 h-20 sm:h-23.5 object-cover rounded-xl shrink-0"
-                />
+                <div className="relative w-30 sm:w-35 h-20 sm:h-23.5 shrink-0">
+                  <SmartImage
+                    src={ongoingCourse?.thumbnail_url || recommendedCourses[recommendedCourses.length - 1]?.thumbnail_url}
+                    alt="Course"
+                    fill
+                    className="object-cover"
+                    containerClassName="rounded-xl w-full h-full"
+                  />
+                </div>
                 <div className="flex flex-col justify-center items-center grow gap-1 sm:gap-2">
                   <h3 className="text-sm sm:text-base font-semibold line-clamp-2">{ongoingCourse?.title || recommendedCourses[recommendedCourses.length - 1]?.title}</h3>
                   <button
@@ -267,11 +278,15 @@ const HomePage = () => {
                 </div>
               </div>
               <div className="grow flex flex-col items-center justify-center gap-2 px-4 sm:px-6 py-3">
-                <img
-                  src={featuredArticle?.image_url}
-                  alt="Featured"
-                  className="w-full max-w-90 h-48 sm:h-52 object-cover rounded-2xl"
-                />
+                <div className="relative w-full max-w-90 h-48 sm:h-52 shrink-0">
+                  <SmartImage
+                    src={featuredArticle?.image_url}
+                    alt="Featured"
+                    fill
+                    className="object-cover"
+                    containerClassName="rounded-2xl w-full h-full"
+                  />
+                </div>
                 <p className="text-base sm:text-md font-semibold leading-tight">{featuredArticle?.title}</p>
               </div>
             </section>
@@ -328,11 +343,15 @@ const HomePage = () => {
                     className="bg-white rounded-2xl px-4 py-8 w-70 md:w-74 shrink-0 space-y-1 h-96 cursor-pointer snap-center"
                     key={index}
                   >
-                    <img
-                      src={course.thumbnail_url}
-                      alt="Course"
-                      className="w-full h-40 md:h-44 rounded-xl object-cover"
-                    />
+                    <div className="relative w-full h-40 md:h-44 shrink-0">
+                      <SmartImage
+                        src={course.thumbnail_url}
+                        alt="Course"
+                        fill
+                        className="object-cover"
+                        containerClassName="rounded-xl w-full h-full"
+                      />
+                    </div>
                     <div className="flex justify-between my-2.5 px-2 text-xs md:text-sm text-gray-600">
                       <span className="bg-purple-300 text-black rounded-lg px-2 py-0.5 text-xs">Basic</span>
                       <span className="font-medium">{course.modules_count} modules • {course.duration} mins</span>
@@ -345,20 +364,37 @@ const HomePage = () => {
             </div>
             <div className="w-full xl:w-1/3">
               <section className="bg-white rounded-3xl border border-gray-300 text-center flex flex-col justify-between w-full min-h-80 sm:h-110 mt-4 xl:mt-0">
-                <div className="flex justify-between items-center">
-                  <img src='/schemes.png' alt='schemes' className='rounded-2xl' />
+                <div className="relative w-full h-32 sm:h-40 shrink-0">
+                  <SmartImage
+                    src='/schemes.png'
+                    alt='schemes'
+                    fill
+                    className='object-cover'
+                    containerClassName='rounded-2xl w-full h-full'
+                  />
                 </div>
 
                 {recommendedSchemes?.length > 0 ? (
                   <div className="space-y-4 max-h-44 overflow-y-auto text-start px-2 mt-4 sm:mt-0">
                     {recommendedSchemes.map((scheme, index) => (
                       <div key={index} className="sm:px-3 flex gap-2">
-                        <div className='h-9 w-9 sm:h-12 sm:w-12' >
-                          <img src={scheme?.bank_name === "HDFC Bank" ? "/hdfc.png" : scheme?.bank_name === "SBI Bank" ? "/sbi.png" : scheme?.bank_name === "ICICI Bank" ? "/icici.png" : "/kotak.png"} alt='bank_logo' className='h-9 w-9 sm:h-12 sm:w-12' />
+                        <div className='relative h-9 w-9 sm:h-12 sm:w-12 shrink-0' >
+                          <SmartImage
+                            src={
+                              scheme?.bank_name === "HDFC Bank" ? "/hdfc.png" :
+                                scheme?.bank_name === "SBI Bank" ? "/sbi.png" :
+                                  scheme?.bank_name === "ICICI Bank" ? "/icici.png" :
+                                    "/kotak.png"
+                            }
+                            alt='bank_logo'
+                            fill
+                            className='object-contain'
+                            containerClassName='w-full h-full'
+                          />
                         </div>
                         <div>
-                        <p className="text-sm sm:text-base font-semibold">{scheme?.bank_name} {scheme?.scheme_name}</p>
-                        <p className="text-sm">{scheme?.description.slice(0,40)}...</p>
+                          <p className="text-sm sm:text-base font-semibold">{scheme?.bank_name} {scheme?.scheme_name}</p>
+                          <p className="text-sm">{scheme?.description.slice(0, 40)}...</p>
                         </div>
                       </div>
                     ))}

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link';
 import instance from '../lib/axios'
 import toast, { Toast } from 'react-hot-toast'
+import Image from 'next/image';
 
 export default function Footer() {
 
@@ -95,11 +96,11 @@ export default function Footer() {
 		<div>
 			<footer className="bg-[#f7fafc] p-6 sm:px-20 sm:py-10 flex flex-col sm:flex-row flex-wrap justify-between text-[#333] font-sans">
 				<div className="flex-1 basis-full sm:basis-50 my-5 sm:m-5 min-w-50 flex flex-col items-center sm:items-start">
-					<img src="/logo.png" alt="FinEd Logo" className="h-12.5 mb-3" />
+					<Image src="/logo.png" alt="FinEd Logo" width={50} height={50} className="h-12.5 mb-3" />
 					<p className="text-sm sm:text-base text-gray-700 mb-4 text-center sm:text-left">Financial Education made Easy.</p>
 					<div className="flex gap-4">
-						<Link href="https://www.linkedin.com/company/fined-personal-finance/"><img src="/linkedin.png" alt="LinkedIn" className="w-8 h-8 transition-transform duration-200 hover:scale-110 cursor-pointer" /></Link>
-						<Link href="https://www.instagram.com/fined.personalfinance"><img src="/insta.jpg" alt="Instagram" className="w-8 h-8 transition-transform duration-200 hover:scale-110 cursor-pointer" /></Link>
+						<Link href="https://www.linkedin.com/company/fined-personal-finance/"><Image src="/linkedin.png" alt="LinkedIn" width={32} height={32} className="w-8 h-8 transition-transform duration-200 hover:scale-110 cursor-pointer" /></Link>
+						<Link href="https://www.instagram.com/fined.personalfinance"><Image src="/insta.jpg" alt="Instagram" width={32} height={32} className="w-8 h-8 transition-transform duration-200 hover:scale-110 cursor-pointer" /></Link>
 					</div>
 				</div>
 				<div className="flex-1 basis-full sm:basis-50 my-5 sm:m-5 min-w-50 font-semibold text-center sm:text-left">

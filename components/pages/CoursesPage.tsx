@@ -5,6 +5,7 @@ import instance from "../lib/axios"
 import toast from 'react-hot-toast'
 import { useUser } from "@auth0/nextjs-auth0"
 import { useRouter } from "next/navigation"
+import SmartImage from "../uiComponents/SmartImage";
 
 export default function CoursesHomePage() {
 	const router = useRouter()
@@ -279,10 +280,12 @@ export default function CoursesHomePage() {
 											</p>
 										</div>
 										<div className="flex gap-5">
-											<img
+											<SmartImage
 												src={ongoingCourse?.thumbnail_url || courses[courses.length - 1]?.thumbnail_url}
 												alt={ongoingCourse?.title || courses[courses.length - 1]?.title}
-												className="w-2/5 h-20 object-cover rounded-md"
+												fill
+												className="object-cover"
+												containerClassName="w-2/5 h-20 rounded-md"
 											/>
 											<div className="flex flex-col justify-center items-center w-full">
 												<div className="flex gap-1">
@@ -439,10 +442,12 @@ function CourseCard({ course, isAuthenticated }: { course: any; isAuthenticated:
 				}
 			}}
 			className="bg-white rounded-xl border border-gray-300 hover:shadow-md transition h-80 sm:w-80 sm:h-90 cursor-pointer">
-			<img
+			<SmartImage
 				src={course.thumbnail_url}
 				alt={course.title}
-				className="w-full h-40 sm:h-48 object-cover rounded-xl mb-2"
+				fill
+				className="object-cover"
+				containerClassName="w-full h-40 sm:h-48 rounded-xl mb-2"
 			/>
 			<div className="p-4 space-y-2" >
 				<div className="flex gap-1" >

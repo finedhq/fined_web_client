@@ -1,9 +1,9 @@
 import React from 'react';
 
-const CourseList = ({ courses }) => {
+const CourseList = ({ courses }: any) => {
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 p-4">
-      {courses.map((course, index) => (
+      {courses.map((course: any, index: number) => (
         <div
           key={index}
           className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition duration-300"

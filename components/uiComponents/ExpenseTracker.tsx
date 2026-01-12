@@ -10,9 +10,9 @@ import { GrNotes } from "react-icons/gr"
 import { RxCross2 } from "react-icons/rx"
 import { AiTwotoneDelete } from "react-icons/ai"
 import toast from "react-hot-toast"
-import Navbar from "./Navbar"
 import { useRouter } from "next/navigation";
 import { useUser } from "@auth0/nextjs-auth0";
+import SmartImage from "./SmartImage";
 
 export default function ExpenseTracker() {
 
@@ -83,7 +83,7 @@ export default function ExpenseTracker() {
   const [hasMore, setHasMore] = useState(true)
 
   const [isFetching, setIsFetching] = useState(false)
-  const [isDataLoading, setIsDataLoading] = useState(true)
+  const [isDataLoading, setIsDataLoading] = useState(false)
   const [warning, setWarning] = useState("")
   const [deleteWarning, setDeleteWarning] = useState("")
   const [disconnectWarning, setDisconnectWarning] = useState(false)
@@ -647,7 +647,6 @@ export default function ExpenseTracker() {
 
   return (
     <div className="relative bg-gray-100" >
-      <Navbar />
       {isDataLoading ?
         <div className="animate-pulse px-12 py-8 space-y-6 bg-gray-100 min-h-screen">
           <div className="flex gap-4">
@@ -702,8 +701,15 @@ export default function ExpenseTracker() {
               <div className="sm:w-3/4" >
                 <FinancialSummaryBar transactions={fetchedTransactions} />
               </div>
-              <div onClick={() => setAutomatePopup(true)} className="mt-4 sm:mt-0 sm:w-1/4 sm:h-1/10 cursor-pointer" >
-                <img src="/automate.jpg" className="h-full w-full rounded-4xl shadow-md object-cover" />
+              <div onClick={() => setAutomatePopup(true)} className="relative mt-4 sm:mt-0 sm:w-1/4 h-60 cursor-pointer" >
+                <SmartImage
+                  src="/automate.jpg"
+                  alt="Automate"
+                  fill
+                  className="object-fill"
+                  // Move rounded classes to the container so they clip the image properly
+                  containerClassName="rounded-4xl shadow-md h-full w-full"
+                />
               </div>
             </div>
             <div className="sm:flex gap-3 mt-4" >

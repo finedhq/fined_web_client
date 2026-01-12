@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Image from "next/image";
 
 const TeamSection = ({ team }: any) => (
   <section className="my-12 py-8">
@@ -10,9 +11,11 @@ const TeamSection = ({ team }: any) => (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {sector.members.map((member: any) => (
             <div key={member.name} className="bg-white rounded-xl shadow p-6 flex flex-col items-center w-full hover:shadow-lg transition-shadow">
-              <img
+              <Image
                 src={`/${member.image}`}
                 alt={member.name}
+                width={96}
+                height={96}
                 className="w-24 h-24 object-cover rounded-full border-4 border-amber-400 mb-4"
               />
               <div className="text-center">

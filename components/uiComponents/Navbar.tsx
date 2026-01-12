@@ -8,6 +8,7 @@ import { MdLogout } from "react-icons/md"
 import { useUser } from '@auth0/nextjs-auth0'
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import SmartImage from './SmartImage';
 
 export default function Navbar() {
 
@@ -61,16 +62,28 @@ export default function Navbar() {
 	return (
 		<div>
 			{isAuthenticated ?
-				<header className="flex flex-col md:flex-row md:items-center h-auto md:h-15.75 bg-[#f7fafc] box-border mb-4">
+				<header className="flex flex-col md:flex-row md:items-center bg-[#f7fafc] box-border sm:pb-2 pb-1 sm:mb-2 mb-1">
 					{/* Mobile and Tablet Header */}
 					<div className="flex justify-between items-center w-full mt-4 xl:hidden px-4">
 						<div onClick={() => router.push('/')} className="flex flex-col items-center font-bold text-lg max-w-45 overflow-hidden whitespace-nowrap cursor-pointer">
-							<img src="/logo.png" alt="FinEd Logo" className="h-12 w-auto object-contain" />
+							<SmartImage
+								src="/logo.png"
+								alt="FinEd logo"
+								width={160} height={60}
+								className="w-auto h-full"
+								containerClassName='h-12 sm:h-14'
+							/>
 							<span className='text-[#4100bc] text-[10px] -mt-2' >Beta</span>
 						</div>
 						<div className="flex items-center gap-4">
 							<div onClick={() => router.push("/notifications")} className="relative bg-white rounded-full p-2 shadow-sm cursor-pointer">
-								<img src="/bell.png" alt="Bell Icon" className='w-6' />
+								<SmartImage
+									src="/bell.png"
+									alt="Bell Icon"
+									width={24}
+									height={24}
+									className='w-6'
+								/>
 								{hasUnseen && (
 									<div className="absolute top-1 right-1 w-3 h-3 bg-amber-400 rounded-full" />
 								)}
@@ -84,7 +97,13 @@ export default function Navbar() {
 					{/* Desktop Header */}
 					<div className="hidden xl:flex xl:flex-row xl:items-center w-full mt-8 px-10 justify-between">
 						<div onClick={() => router.push('/home')} className="flex flex-col items-center font-bold text-lg w-32 max-w-45 overflow-hidden whitespace-nowrap cursor-pointer">
-							<img src="/logo.png" alt="FinEd Logo" className="h-15 w-auto object-contain rounded-b-md" />
+							<SmartImage
+								src="/logo.png"
+								alt="FinEd logo"
+								width={160} height={60}
+								className="w-auto h-full"
+								containerClassName='h-12 sm:h-14'
+							/>
 							<span className='text-[#4100bc] text-[10px] -mt-2' >Beta</span>
 						</div>
 						<nav className="flex flex-wrap justify-center gap-5">
@@ -133,7 +152,13 @@ export default function Navbar() {
 								/>
 							</div>
 							<div onClick={() => router.push("/notifications")} className="relative bg-white rounded-full p-3 shadow-sm cursor-pointer">
-								<img src="/bell.png" alt="Bell Icon" width="24" />
+								<SmartImage
+									src="/bell.png"
+									alt="Bell Icon"
+									width={24}
+									height={24}
+									className='w-6'
+								/>
 								{hasUnseen && (
 									<div className="absolute top-0 right-1 w-3 h-3 bg-amber-400 rounded-full" />
 								)}
@@ -209,10 +234,12 @@ export default function Navbar() {
 					<header className="flex flex-col sm:flex-row justify-between items-center px-4 sm:px-10 lg:px-16 py-3 sm:py-6 bg-[#f7fafc]">
 						<div className="flex items-center justify-between w-full sm:w-auto mb-4 sm:mb-0">
 							<div onClick={() => router.push('/')} className="flex flex-col items-center font-bold text-lg max-w-50 overflow-hidden whitespace-nowrap cursor-pointer">
-								<img
+								<SmartImage
 									src="/logo.png"
 									alt="FinEd logo"
-									className="h-12 sm:h-14 w-auto object-contain"
+									width={160} height={60}
+									className="w-auto h-full"
+									containerClassName='h-12 sm:h-14'
 								/>
 								<span className='text-[#4100bc] text-[10px] -mt-2' >Beta</span>
 							</div>

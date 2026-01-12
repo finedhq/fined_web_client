@@ -5,10 +5,12 @@ import instance from "../../lib/axios";
 import ArticlePage from "./ArticlePage";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@auth0/nextjs-auth0";
+import SmartImage from "@/components/uiComponents/SmartImage";
 
 const ArticlesList = () => {
   const [articles, setArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [scrollEnabled, setScrollEnabled] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [articlesPerPage] = useState(10); // Matches backend default limit
   const [totalArticles, setTotalArticles] = useState(0);
@@ -36,12 +38,14 @@ const ArticlesList = () => {
 
   const openModal = (id: string) => {
     router.push(`?article=${id}`, { scroll: false });
+    setScrollEnabled(false);
   };
 
   const closeModal = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("article");
-    router.push(`?${params.toString()}`, { scroll: false });
+    router.push(`?${params.toString()}`, { scroll: true });
+    setScrollEnabled(true);
   };
 
   useEffect(() => {
@@ -92,7 +96,7 @@ const ArticlesList = () => {
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className={`p-6 max-w-5xl mx-auto ${scrollEnabled ? "overflow-auto" : "overflow-hidden"}`}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">All Articles</h2>
         <button
@@ -129,10 +133,12 @@ const ArticlesList = () => {
               </h3>
 
               {article.image_url && (
-                <img
+                <SmartImage
                   src={article.image_url}
                   alt="Thumbnail"
-                  className="w-full max-w-sm rounded"
+                  fill
+                  className="object-cover"
+                  containerClassName="w-full max-w-sm h-56 rounded"
                 />
               )}
 

@@ -6,6 +6,7 @@ import instance from "../lib/axios"
 import { useRouter } from "next/navigation";
 import { useUser } from "@auth0/nextjs-auth0";
 import toast from "react-hot-toast";
+import SmartImage from "../uiComponents/SmartImage";
 
 const tools = [
 	{
@@ -72,7 +73,7 @@ export default function FinToolsPage() {
 	};
 
 	return (
-		<div className="sm:pb-5 min-h-screen bg-gray-100">
+		<div className="sm:pb-5 bg-gray-100">
 			<div className="px-4 sm:px-10 py-10" >
 				<h1 className="text-3xl font-bold mb-8 text-gray-800">FinTools</h1>
 				<div className="w-68 mx-auto sm:mx-0">
@@ -83,10 +84,12 @@ export default function FinToolsPage() {
 								} transition-all duration-300`}
 							onClick={() => tool.available && router.push(tool.route)}
 						>
-							<img
+							<SmartImage
 								src={tool.image}
 								alt={tool.name}
-								className="object-contain"
+								fill
+								className="object-fill"
+								containerClassName="shrink-0 w-full h-48"
 							/>
 							<div className="p-4">
 								<h2 className="text-xl font-semibold text-gray-800 mb-2">

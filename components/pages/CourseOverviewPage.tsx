@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/navigation";
 import { ParamValue } from "next/dist/server/request/params";
+import SmartImage from "../uiComponents/SmartImage";
 
 const imageAssets = {
   completed: "/FcomplitedModule.png",
@@ -182,7 +183,7 @@ export default function CourseOverviewPage({ courseId }: { courseId: ParamValue 
                           }}
                           className="transition-transform duration-200 hover:scale-110 focus:scale-90 cursor-pointer"
                         >
-                          <img
+                          <SmartImage
                             src={imageAssets[
                               card.status === "completed"
                                 ? "completed"
@@ -191,7 +192,9 @@ export default function CourseOverviewPage({ courseId }: { courseId: ParamValue 
                                   : "locked"
                             ]}
                             alt="status icon"
-                            className="w-16 h-16 object-contain"
+                            fill
+                            containerClassName="w-16 h-16"
+                            className="object-contain"
                           />
                         </button>
                         <p className="text-center w-28 sm:w-96 mb-2 overflow-hidden text-[10px] sm:text-base text-ellipsis">
@@ -200,10 +203,11 @@ export default function CourseOverviewPage({ courseId }: { courseId: ParamValue 
                       </div>
 
                       {i !== module.cards.length - 1 && (
-                        <img
+                        <SmartImage
                           src={i % 2 === 0 ? imageAssets.pathLeftToRight : imageAssets.pathRightToLeft}
                           alt="path"
-                          className="w-6/7 sm:w-5/12 h-16 mx-auto"
+                          fill
+                          containerClassName="w-6/7 sm:w-5/12 h-16 mx-auto"
                         />
                       )}
                     </div>

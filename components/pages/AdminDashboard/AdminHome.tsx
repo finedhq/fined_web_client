@@ -1,5 +1,6 @@
 'use client';
 
+import SmartImage from "@/components/uiComponents/SmartImage";
 import { useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -58,7 +59,13 @@ const AdminHome = () => {
       {/* Top Navigation */}
       <div className="w-full max-w-6xl flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
-          <img onClick={() => router.push('/')} src="/logo.png" alt="FinEd Logo" className="h-12 w-auto rounded-md cursor-pointer" />
+          <SmartImage
+            onClick={() => router.push('/')}
+            src="/logo.png" alt="FinEd Logo"
+            width={100} height={48}
+            containerClassName="h-12 w-auto rounded-md cursor-pointer"
+            className="h-12 w-auto rounded-md cursor-pointer object-contain"
+          />
           <h2 className="text-2xl font-bold text-indigo-700">FinEd Admin Panel</h2>
         </div>
         <button
@@ -87,7 +94,7 @@ const AdminHome = () => {
               disabled={card.disabled}
               className={`flex flex-col items-center justify-center p-6 rounded-xl shadow-md text-white font-semibold text-lg text-center transition ${card.disabled
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700"
+                : "bg-indigo-600 hover:bg-indigo-700 cursor-pointer"
                 }`}
             >
               <span className="text-4xl mb-3">{card.icon}</span>

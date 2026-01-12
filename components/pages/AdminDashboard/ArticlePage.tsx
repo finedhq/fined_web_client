@@ -1,25 +1,31 @@
-import React, { useEffect, useRef } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+'use client';
 
-const ArticlePage = ({ article, onClose }) => {
-  const modalRef = useRef(null);
+import React, { useEffect, useRef, useState } from "react";
+import { useUser } from "@auth0/nextjs-auth0";
+import { useRouter } from "next/navigation";
 
-  const { user, isLoading, isAuthenticated, logout } = useAuth0()
+const ArticlePage = ({ article, onClose }: any) => {
+  const router = useRouter();
+
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  const { user, isLoading } = useUser()
+  const isAuthenticated = !!user;
   const [role, setrole] = useState("")
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      navigate("/")
+      router.push("/")
     } else if (!isLoading && isAuthenticated) {
       const roles = user?.["https://fined.com/roles"]
       setrole(roles?.[0] || "")
-      if (roles?.[0] !== "Admin") navigate("/")
+      if (roles?.[0] !== "Admin") router.push("/")
     }
   }, [isLoading, isAuthenticated])
 
   // Close on Esc key
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -27,8 +33,8 @@ const ArticlePage = ({ article, onClose }) => {
   }, [onClose]);
 
   // Close on outside click
-  const handleBackdropClick = (e) => {
-    if (modalRef.current && !modalRef.current.contains(e.target)) {
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement> | undefined) => {
+    if (modalRef.current && !modalRef.current.contains(e?.target as Node)) {
       onClose();
     }
   };
@@ -47,14 +53,14 @@ const ArticlePage = ({ article, onClose }) => {
   return (
 
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4"
+      className="fixed inset-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50 px-4 py-4"
       role="dialog"
       aria-modal="true"
       onClick={handleBackdropClick}
     >
       <div
         ref={modalRef}
-        className="bg-white rounded-lg p-6 max-w-3xl w-full relative shadow-lg animate-fade-in"
+        className="bg-white rounded-lg p-6 max-w-3xl w-full relative shadow-lg animate-fade-in overflow-scroll max-h-screen"
       >
         {/* Header buttons */}
         <div className="absolute top-3 right-3 flex gap-3">
@@ -75,7 +81,7 @@ const ArticlePage = ({ article, onClose }) => {
         </div>
 
         {/* Article Content */}
-        <h1 className="text-2xl sm:text-3xl font-bold mb-4">{article.title}</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold my-4">{article.title}</h1>
 
         {article.image_url && (
           <img

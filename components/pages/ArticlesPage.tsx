@@ -6,12 +6,13 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation';
 import { useUser } from '@auth0/nextjs-auth0';
+import SmartImage from '../uiComponents/SmartImage';
 
 const ArticlesPage = () => {
   const router = useRouter()
 
   const { user, isLoading } = useUser();
-  const isAuthenticated = !!user;
+  const isAuthenticated = true;
   const [role, setrole] = useState("")
 
   const [email, setEmail] = useState("")
@@ -269,7 +270,7 @@ const ArticlesPage = () => {
     }
   }
 
-  const fetchArticleRating = async ({ email, articleId } : { email: string, articleId: string }) => {
+  const fetchArticleRating = async ({ email, articleId }: { email: string, articleId: string }) => {
     setFetchedArticleRating(null)
     setArticleRating(0)
     try {
@@ -289,7 +290,7 @@ const ArticlesPage = () => {
     }
   }
 
-  const saveArticleRating = async ({ email, articleId, rating } : { email: string, articleId: string, rating: number }) => {
+  const saveArticleRating = async ({ email, articleId, rating }: { email: string, articleId: string, rating: number }) => {
     try {
       const res = await instance.post("/articles/rate", {
         email,
@@ -388,7 +389,14 @@ const ArticlesPage = () => {
 
               <div onClick={() => openArticle(articles[0])} className="bg-white min-w-1/2 rounded-3xl overflow-hidden cursor-pointer">
                 <div className="relative">
-                  <img src={articles[0]?.image_url || "_"} alt="article_image_1" onLoad={() => checkScroll(carouselRef1.current, setCanScrollLeft1, setCanScrollRight1)} className="w-full h-48 sm:h-96 object-cover" />
+                  <SmartImage
+                    src={articles[0]?.image_url}
+                    alt="article_image_1"
+                    fill
+                    onLoad={() => checkScroll(carouselRef1.current, setCanScrollLeft1, setCanScrollRight1)}
+                    className="object-cover"
+                    containerClassName='w-full h-48 sm:h-96'
+                  />
                   <span className="absolute top-4 left-4 bg-white text-sm px-3 py-1 rounded-full font-semibold shadow">Featured</span>
                 </div>
                 <div className="p-6">
@@ -427,7 +435,13 @@ const ArticlesPage = () => {
                 <div ref={carouselRef1} style={{ scrollbarWidth: 'none', overflowX: 'auto', columnGap: '0rem' }} className="h-72 sm:h-125 sm:w-11/12 columns-1 carousel-track-1 space-y-5.5 gap-2" >
                   {articles.slice(1).map((article, index) =>
                     <div onClick={() => openArticle(article)} key={index + 4} className="flex gap-4 sm:gap-6 cursor-pointer h-20 w-11/12 sm:h-36 sm:w-157.5">
-                      <img src={article?.image_url || "_"} alt={`article_image_${index + 4}`} className="w-24 h-20 sm:w-40 sm:h-36 object-fill rounded-lg" />
+                      <SmartImage
+                        src={article?.image_url}
+                        alt={`article_image_${index + 4}`}
+                        fill
+                        className="object-fill"
+                        containerClassName='w-24 h-20 sm:w-40 sm:h-36 rounded-lg shrink-0'
+                      />
                       <div>
                         <p className="text-[10px] sm:text-xs text-gray-400 sm:mb-1">{new Date(article?.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || ""}</p>
                         <h3 className="text-xs sm:text-lg font-semibold text-gray-900 mb-1">{article?.title || ""}</h3>
@@ -450,7 +464,14 @@ const ArticlesPage = () => {
             {/* <div className="flex flex-col sm:flex-row gap-6 px-4 sm:px-10 py-12 bg-gray-100">
 
               <div onClick={() => openArticle(articles[1])} className='cursor-pointer min-w-1/2' >
-                <img src={articles[1]?.image_url || "_"} alt="article_image_2" onLoad={() => checkScroll(carouselRef2.current, setCanScrollLeft2, setCanScrollRight2)} className="rounded-2xl w-full h-40 sm:h-72 object-cover mb-4 sm:mb-6" />
+                <SmartImage
+                  src={articles[1]?.image_url}
+                  alt="article_image_2"
+                  fill
+                  onLoad={() => checkScroll(carouselRef2.current, setCanScrollLeft2, setCanScrollRight2)}
+                  className="object-cover"
+                  containerClassName='rounded-2xl w-full h-40 sm:h-72 mb-4 sm:mb-6'
+                />
                 <h2 className="text-md sm:text-2xl font-semibold text-gray-900 mb-1 sm:mb-2">{articles[1]?.title || ""}</h2>
                 <div className="flex items-center text-xs sm:text-sm text-gray-500 mb-2 sm:mb-4">
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -477,7 +498,7 @@ const ArticlesPage = () => {
                   <p className='text-gray-600 text-xs sm:text-sm' >[ . . . ]</p>
                 </div>
                 <div className='sm:mr-6' >
-                  <img src={articles[2]?.image_url || "_"} alt="article_image_3" className="rounded-2xl w-full h-40 sm:h-72 object-cover" />
+                  <SmartImage src={articles[2]?.image_url || "_"} alt="article_image_3" className="rounded-2xl w-full h-40 sm:h-72 object-cover" />
                 </div>
               </div>
             </div> */}
@@ -511,7 +532,7 @@ const ArticlesPage = () => {
               <div ref={carouselRef2} style={{ scrollbarWidth: 'none', overflowX: 'auto', columnGap: '0rem' }} className="max-h-142.5 columns-2 carousel-track-2 space-x-4" >
                 {articles.slice(3).map((article, index) =>
                   <div key={index + 4} onClick={() => openArticle(article)} className="flex gap-5 mb-6 p-4 cursor-pointer">
-                    <img src={article?.image_url || "_"} alt={`article_image_${index + 4}`} className="w-33 h-32 rounded-md object-cover" />
+                    <SmartImage src={article?.image_url || "_"} alt={`article_image_${index + 4}`} className="w-33 h-32 rounded-md object-cover" />
                     <div>
                       <p className="text-sm text-gray-500 mb-1">{new Date(article?.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || ""}</p>
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">{article?.title || ""}</h3>
@@ -537,7 +558,15 @@ const ArticlesPage = () => {
 
             <div onClick={() => openArticle(articles[0])} className="bg-white min-w-1/2 rounded-3xl overflow-hidden cursor-pointer">
               <div className="relative">
-                <img src={articles[0]?.image_url || "_"} alt="article_image_1" onLoad={() => checkScroll(carouselRef1.current, setCanScrollLeft1, setCanScrollRight1)} className="w-full h-48 sm:h-96 object-cover" />
+                <SmartImage
+                  src={articles[0]?.image_url}
+                  alt="article_image_1"
+                  fill
+                  onLoad={() => checkScroll(carouselRef1.current, setCanScrollLeft1, setCanScrollRight1)}
+                  className="object-cover"
+                  containerClassName="w-full h-48 sm:h-96"
+
+                />
                 <span className="absolute top-4 left-4 bg-white text-sm px-3 py-1 rounded-full font-semibold shadow">Featured</span>
               </div>
               <div className="p-6">
@@ -576,7 +605,13 @@ const ArticlesPage = () => {
               <div ref={carouselRef1} style={{ scrollbarWidth: 'none', overflowX: 'auto', columnGap: '0rem' }} className="h-72 sm:h-125 sm:w-full columns-1 carousel-track-1 space-y-5.5 gap-2" >
                 {articles.slice(1).map((article, index) =>
                   <div onClick={() => openArticle(article)} key={index + 4} className="flex gap-4 sm:gap-6 cursor-pointer h-20 w-11/12 sm:h-36 sm:w-157.5">
-                    <img src={article?.image_url || "_"} alt={`article_image_${index + 4}`} className="w-24 h-20 sm:w-40 sm:h-36 object-fill rounded-lg" />
+                    <SmartImage
+                      src={article?.image_url}
+                      alt={`article_image_${index + 4}`}
+                      fill
+                      className="object-fill rounded-lg"
+                      containerClassName='inset-0 w-24 h-20 sm:w-40 sm:h-36 rounded-lg shrink-0'
+                    />
                     <div>
                       <p className="text-[10px] sm:text-xs text-gray-400 sm:mb-1">{new Date(article?.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || ""}</p>
                       <h3 className="text-xs sm:text-lg font-semibold text-gray-900 mb-1">{article?.title || ""}</h3>
@@ -599,7 +634,7 @@ const ArticlesPage = () => {
           {/* <div className="flex flex-col sm:flex-row gap-6 px-4 sm:px-10 py-12 bg-gray-100">
 
             <div className='cursor-pointer min-w-1/2' >
-              <img src={articles[1]?.image_url || "_"} alt="article_image_2" onLoad={() => checkScroll(carouselRef2.current, setCanScrollLeft2, setCanScrollRight2)} className="rounded-2xl w-full h-40 sm:h-72 object-cover mb-4 sm:mb-6" />
+              <SmartImage src={articles[1]?.image_url || "_"} alt="article_image_2" onLoad={() => checkScroll(carouselRef2.current, setCanScrollLeft2, setCanScrollRight2)} className="rounded-2xl w-full h-40 sm:h-72 object-cover mb-4 sm:mb-6" />
               <h2 className="text-md sm:text-2xl font-semibold text-gray-900 mb-1 sm:mb-2">{articles[1]?.title || ""}</h2>
               <div className="flex items-center text-xs sm:text-sm text-gray-500 mb-2 sm:mb-4">
                 <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -626,7 +661,7 @@ const ArticlesPage = () => {
                 <p className='text-gray-600 text-xs sm:text-sm' >[ . . . ]</p>
               </div>
               <div className='sm:mr-6' >
-                <img src={articles[2]?.image_url || "_"} alt="article_image_3" className="rounded-2xl w-full h-40 sm:h-72 object-cover" />
+                <SmartImage src={articles[2]?.image_url || "_"} alt="article_image_3" className="rounded-2xl w-full h-40 sm:h-72 object-cover" />
               </div>
             </div>
           </div>
@@ -660,7 +695,7 @@ const ArticlesPage = () => {
             <div ref={carouselRef2} style={{ scrollbarWidth: 'none', overflowX: 'auto', columnGap: '0rem' }} className="max-h-142.5 columns-2 carousel-track-2 space-x-4" >
               {articles.slice(3).map((article, index) =>
                 <div key={index + 4} className="flex gap-5 mb-6 p-4 cursor-pointer">
-                  <img src={article?.image_url || "_"} alt={`article_image_${index + 4}`} className="w-33 h-32 rounded-md object-cover" />
+                  <SmartImage src={article?.image_url || "_"} alt={`article_image_${index + 4}`} className="w-33 h-32 rounded-md object-cover" />
                   <div>
                     <p className="text-sm text-gray-500 mb-1">{new Date(article?.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || ""}</p>
                     <h3 className="text-lg font-semibold text-gray-900 mb-1">{article?.title || ""}</h3>
@@ -739,10 +774,12 @@ const ArticlesPage = () => {
             >
               &times;
             </button>
-            <img
-              src={selectedArticle.image_url || "_"}
+            <SmartImage
+              src={selectedArticle.image_url}
               alt="Article"
-              className="h-60 w-full sm:h-3/4 sm:max-h-full object-contain rounded-md mb-6"
+              fill
+              containerClassName="relative h-60 w-full sm:h-3/4 sm:max-h-full rounded- mb-6"
+              className="rounded-2xl"
             />
             <div className='sm:px-40' >
               <h2 className="text-xl sm:text-4xl font-bold sm:font-extrabold text-gray-800 mb-3">{selectedArticle.title}</h2>

@@ -5,6 +5,7 @@ import instance from "../lib/axios"
 import toast from 'react-hot-toast'
 import TeamSection from "../uiComponents/TeamSection"
 import { useUser } from "@auth0/nextjs-auth0";
+import Image from "next/image";
 
 const AboutUs = () => {
 
@@ -163,7 +164,7 @@ const AboutUs = () => {
           </div>
           <div className="w-40 h-40 bg-gray-200 rounded-lg flex items-center justify-center">
             {/* Replace this with your actual logo */}
-            <img src="/logo.png" />
+            <Image src="/logo.png" alt="FinEd Logo" width={160} height={160} />
           </div>
         </section>
 
@@ -245,7 +246,7 @@ const AboutUs = () => {
           </p>
           <div className="w-40 h-40 bg-gray-200 rounded-lg flex items-center justify-center">
             {/* Replace this with actual mascot image */}
-            <img src="/mascot.jpg" />
+            <Image src="/mascot.jpg" alt="Finix Mascot" width={160} height={160} />
           </div>
         </section>
 

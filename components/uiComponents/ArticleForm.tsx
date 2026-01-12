@@ -1,10 +1,12 @@
 'use client'
 
 import React, { useState, useEffect } from "react";
-import axios from "../lib/axios.js";
+import axios from "../lib/axios";
 import { useRouter } from "next/navigation.js";
 import { useUser } from "@auth0/nextjs-auth0";
 import Link from "next/link";
+import { SimpleEditor } from "../tiptap/tiptap-templates/simple/simple-editor";
+import toast from "react-hot-toast";
 
 const ArticleForm = () => {
 
@@ -33,6 +35,11 @@ const ArticleForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!form.title || !form.content) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append("title", form.title);
@@ -41,12 +48,12 @@ const ArticleForm = () => {
 
     try {
       const res = await axios.post("/articles/add", formData);
-      alert("✅ Article posted!");
+      toast.success("✅ Article posted!");
       setForm({ title: "", content: "" });
       setImageFile(null);
     } catch (err: any) {
       console.error("❌ Error:", err.response?.data || err.message);
-      alert("Failed to post article.");
+      toast.error("Failed to post article.");
     }
   };
 
@@ -78,8 +85,18 @@ const ArticleForm = () => {
           </div>
 
           <div>
+            <label className="block mb-1 text-sm font-medium text-gray-700">Upload Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImageFile(e.target.files?.[0])}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 file:mr-3 file:py-2 file:px-4 file:border-0 file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200"
+            />
+          </div>
+
+          <div>
             <label className="block mb-1 text-sm font-medium text-gray-700">Content</label>
-            <textarea
+            {/* <textarea
               name="content"
               value={form.content}
               onChange={handleChange}
@@ -87,16 +104,10 @@ const ArticleForm = () => {
               rows={6}
               placeholder="Write your article here..."
               className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 resize-y focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Upload Image</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setImageFile(e.target.files?.[0])}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 file:mr-3 file:py-2 file:px-4 file:border-0 file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200"
+            /> */}
+            <SimpleEditor
+              content={form.content}
+              onChange={(content) => setForm({ ...form, content })}
             />
           </div>
 
