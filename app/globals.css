@@ -104,10 +104,10 @@ body {
 }
 
 .prose a {
-  /* color: #6366f1; Indigo-500 to match your theme */
-  /* text-decoration: none; */
+  color: #6366f1; /* Indigo-500 to match your theme */
+  text-decoration: none;
 }
 
 .prose a:hover {
-  /* text-decoration: underline; */
+  text-decoration: underline;
 }
