@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/navigation";
+import { RichTextViewer } from "@/components/uiComponents/RichTextViewer";
 
 const ArticlePage = ({ article, onClose }: any) => {
   const router = useRouter();
@@ -19,7 +20,7 @@ const ArticlePage = ({ article, onClose }: any) => {
     } else if (!isLoading && isAuthenticated) {
       const roles = user?.["https://fined.com/roles"]
       setrole(roles?.[0] || "")
-      if (roles?.[0] !== "Admin") router.push("/")
+      // if (roles?.[0] !== "Admin") router.push("/")
     }
   }, [isLoading, isAuthenticated])
 
@@ -91,9 +92,9 @@ const ArticlePage = ({ article, onClose }: any) => {
           />
         )}
 
-        <p className="whitespace-pre-line leading-relaxed text-gray-800 text-[1.05rem]">
-          {article.content}
-        </p>
+        <div className="whitespace-pre-line leading-relaxed text-gray-800 text-[1.05rem]">
+          <RichTextViewer content={article.content} />
+        </div>
       </div>
     </div>
   );

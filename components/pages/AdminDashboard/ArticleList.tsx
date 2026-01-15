@@ -6,6 +6,7 @@ import ArticlePage from "./ArticlePage";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@auth0/nextjs-auth0";
 import SmartImage from "@/components/uiComponents/SmartImage";
+import { RichTextViewer } from "@/components/uiComponents/RichTextViewer";
 
 const ArticlesList = () => {
   const [articles, setArticles] = useState<any[]>([]);
@@ -27,7 +28,7 @@ const ArticlesList = () => {
     } else if (!isLoading && isAuthenticated) {
       const roles = user?.["https://fined.com/roles"]
       setrole(roles?.[0] || "")
-      if (roles?.[0] !== "Admin") router.push("/")
+      // if (roles?.[0] !== "Admin") router.push("/")
     }
   }, [isLoading, isAuthenticated])
 
@@ -142,9 +143,9 @@ const ArticlesList = () => {
                 />
               )}
 
-              <p className="text-gray-700 line-clamp-3">
-                {article.content_text}
-              </p>
+              <div className="text-gray-700 line-clamp-3">
+                <RichTextViewer content={article.content} />
+              </div>
 
               <span className="text-blue-600 underline font-medium">
                 View Full Article →
