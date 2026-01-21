@@ -39,15 +39,21 @@ const HomePage = () => {
   const [showDescription, setShowDescription] = useState(false)
   const [course_id, setCourseId] = useState("")
 
+   useEffect(() => {
+    if (isLoading || !isAuthenticated) return;
+ 
+    fetch("/api/auth/me")
+      .then(res => res.json())
+      .then(data => {
+      console.log("Data from /api/me: ",data);
+      setrole(data.roles?.[0] || "");
+      })
+      .catch(() => setrole(""));
+      
+  }, [isLoading, isAuthenticated]);
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push("/")
-    } else if (!isLoading && isAuthenticated) {
-      setEmail(user.email || '')
-      const roles = user?.["https://fined.com/roles"]
-      setrole(roles?.[0] || "")
-    }
-  }, [isLoading, isAuthenticated])
+    console.log("Role updated:", role);
+  }, [role]);
 
   const checkScroll = (el: HTMLDivElement | null, setLeft: React.Dispatch<React.SetStateAction<boolean>>, setRight: React.Dispatch<React.SetStateAction<boolean>>) => {
     if (!el) return;
@@ -493,7 +499,7 @@ const HomePage = () => {
               ) : (
                 <div className="divide-y divide-gray-200">
                   {(() => {
-                    const leaderboardWithRanks = [];
+                    const leaderboardWithRanks: any[] = [];
                     let rank = 1;
                     let lastStars = null;
                     let skip = 0;

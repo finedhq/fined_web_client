@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useMessagesStore } from '../store/SBIStore';
+import Navbar from '../uiComponents/Navbar';
+import Footer from '../uiComponents/Footer';
 
 
 
@@ -8,7 +10,7 @@ const UnnatiCardList = () => {
   const [activeTab, setActiveTab] = useState({});
 
   useEffect(() => {
-     getSBIUnnatiCard();
+    getSBIUnnatiCard();
   }, []);
 
   const tabNames = [
@@ -76,11 +78,10 @@ const UnnatiCardList = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab({ ...activeTab, [index]: tab })}
-                    className={`text-left px-4 py-2 rounded-md font-medium ${
-                      selectedTab === tab
+                    className={`text-left px-4 py-2 rounded-md font-medium ${selectedTab === tab
                         ? 'bg-yellow-400 text-black shadow-sm'
                         : 'hover:bg-gray-200 text-blue-700'
-                    }`}
+                      }`}
                   >
                     {tab}
                   </button>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
-import axios from "../lib/axios.js";
+import axios from "../lib/axios";
 import Link from "next/link";
 import { ParamValue } from "next/dist/server/request/params.js";
 import { useRouter } from "next/navigation.js";
@@ -31,16 +31,21 @@ const CardForm = ({ moduleId }: { moduleId: ParamValue }) => {
   const isAuthenticated = !!user;
   const [role, setrole] = useState("")
 
+   useEffect(() => {
+    if (isLoading || !isAuthenticated) return;
+ 
+    fetch("/api/auth/me")
+      .then(res => res.json())
+      .then(data => {
+      console.log("Data from /api/me: ",data);
+      setrole(data.roles?.[0] || "");
+      })
+      .catch(() => setrole(""));
+      
+  }, [isLoading, isAuthenticated]);
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push("/")
-    } else if (!isLoading && isAuthenticated) {
-      const roles = user?.["https://fined.com/roles"]
-      setrole(roles?.[0] || "")
-      if (roles?.[0] !== "Admin") router.push("/")
-    }
-  }, [isLoading, isAuthenticated])
-
+    console.log("Role updated:", role);
+  }, [role]);
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({

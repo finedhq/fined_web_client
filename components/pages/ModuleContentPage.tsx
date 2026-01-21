@@ -35,15 +35,21 @@ const ModuleContentPage = ({ params } : { params: Params}) => {
 
   const [localCompletedCards, setLocalCompletedCards] = useState<Record<string, any>>({})
 
+   useEffect(() => {
+    if (isLoading || !isAuthenticated) return;
+ 
+    fetch("/api/auth/me")
+      .then(res => res.json())
+      .then(data => {
+      console.log("Data from /api/me: ",data);
+      setrole(data.roles?.[0] || "");
+      })
+      .catch(() => setrole(""));
+      
+  }, [isLoading, isAuthenticated]);
   useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      setEmail(user?.email || "")
-      setHasUser(true)
-      const roles = user?.["https://fined.com/roles"]
-      setrole(roles?.[0] || "")
-    }
-  }, [isLoading, isAuthenticated])
-
+    console.log("Role updated:", role);
+  }, [role]);
   async function fetchCard() {
     try {
       const res = await instance.post(`/courses/course/${courseId}/module/${moduleId}/card/${cardId}`, { email })

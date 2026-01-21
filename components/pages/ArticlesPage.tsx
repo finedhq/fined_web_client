@@ -47,13 +47,21 @@ const ArticlesPage = () => {
   const [warning, setWarning] = useState("")
   const [error, setError] = useState("")
 
-  useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      setEmail(user?.email || "");
-      const roles = user?.["https://fined.com/roles"];
-      setrole(roles?.[0] || "");
-    }
+ useEffect(() => {
+    if (isLoading || !isAuthenticated) return;
+ 
+    fetch("/api/auth/me")
+      .then(res => res.json())
+      .then(data => {
+      console.log("Data from /api/me: ",data);
+      setrole(data.roles?.[0] || "");
+      })
+      .catch(() => setrole(""));
+      
   }, [isLoading, isAuthenticated]);
+  useEffect(() => {
+    console.log("Role updated:", role);
+  }, [role]);
 
   const checkScroll = (el: HTMLDivElement | null, setLeft: React.Dispatch<React.SetStateAction<boolean>>, setRight: React.Dispatch<React.SetStateAction<boolean>>) => {
     if (!el) return;

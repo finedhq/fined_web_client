@@ -4,74 +4,77 @@ import instance from "../lib/axios";
 
 // 1. Define the interface for your data and actions
 export interface BankProduct {
-  [key: string]: any;
+	[key: string]: any;
 }
 
 interface MessageStore {
-  // State Arrays
-  savings: BankProduct[];
-  fd: BankProduct[];
-  taxsaverfd: BankProduct[];
-  rd: BankProduct[];
-  ppf: BankProduct[];
-  nps: BankProduct[];
-  unnaticard: BankProduct[];
-  simplysave: BankProduct[];
-  kotaksavings: BankProduct[];
-  hdfcsavings: BankProduct[];
-  digihdfcsavings: BankProduct[];
-  maxhdfcsavings: BankProduct[];
-  hdfcfd: BankProduct[];
-  icicisavings: BankProduct[];
-  icicibasicsavings: BankProduct[];
-  iciciyoungsavings: BankProduct[];
-  icicifd: BankProduct[];
-  icicird: BankProduct[];
-  kotakace: BankProduct[];
+	// State Arrays
+	savings: BankProduct[];
+	fd: BankProduct[];
+	taxsaverfd: BankProduct[];
+	rd: BankProduct[];
+	ppf: BankProduct[];
+	nps: BankProduct[];
+	unnaticard: BankProduct[];
+	simplysave: BankProduct[];
+	kotaksavings: BankProduct[];
+	hdfcsavings: BankProduct[];
+	digihdfcsavings: BankProduct[];
+	maxhdfcsavings: BankProduct[];
+	hdfcfd: BankProduct[];
+	icicisavings: BankProduct[];
+	icicibasicsavings: BankProduct[];
+	iciciyoungsavings: BankProduct[];
+	icicifd: BankProduct[];
+	icicird: BankProduct[];
+	kotakace: BankProduct[];
+	hdfcrd: BankProduct[];
 	hdfcmoney: BankProduct[];
 
-  // Setters
-  setsavings: (data: BankProduct[]) => void;
-  setfd: (data: BankProduct[]) => void;
-  settaxsaverfd: (data: BankProduct[]) => void;
-  setrd: (data: BankProduct[]) => void;
-  setppf: (data: BankProduct[]) => void;
-  setnps: (data: BankProduct[]) => void;
-  setunnaticard: (data: BankProduct[]) => void;
-  setsimplysave: (data: BankProduct[]) => void;
-  setkotaksavings: (data: BankProduct[]) => void;
-  sethdfcsavings: (data: BankProduct[]) => void;
-  setdigihdfcsavings: (data: BankProduct[]) => void;
-  setmaxhdfcsavings: (data: BankProduct[]) => void;
-  sethdfcfd: (data: BankProduct[]) => void;
-  seticicisavings: (data: BankProduct[]) => void;
-  seticicibasicsavings: (data: BankProduct[]) => void;
-  seticiciyoungsavings: (data: BankProduct[]) => void;
-  seticicifd: (data: BankProduct[]) => void;
-  seticicird: (data: BankProduct[]) => void;
-  setkotakace: (data: BankProduct[]) => void;
+	// Setters
+	setsavings: (data: BankProduct[]) => void;
+	setfd: (data: BankProduct[]) => void;
+	settaxsaverfd: (data: BankProduct[]) => void;
+	setrd: (data: BankProduct[]) => void;
+	setppf: (data: BankProduct[]) => void;
+	setnps: (data: BankProduct[]) => void;
+	setunnaticard: (data: BankProduct[]) => void;
+	setsimplysave: (data: BankProduct[]) => void;
+	setkotaksavings: (data: BankProduct[]) => void;
+	sethdfcsavings: (data: BankProduct[]) => void;
+	setdigihdfcsavings: (data: BankProduct[]) => void;
+	setmaxhdfcsavings: (data: BankProduct[]) => void;
+	sethdfcfd: (data: BankProduct[]) => void;
+	seticicisavings: (data: BankProduct[]) => void;
+	seticicibasicsavings: (data: BankProduct[]) => void;
+	seticiciyoungsavings: (data: BankProduct[]) => void;
+	seticicifd: (data: BankProduct[]) => void;
+	seticicird: (data: BankProduct[]) => void;
+	setkotakace: (data: BankProduct[]) => void;
+	sethdfcrd: (data: BankProduct[]) => void;
 	sethdfcmoney: (data: BankProduct[]) => void;
 
-  // Async Actions
-  getSBISavings: () => Promise<void>;
-  getSBIfd: () => Promise<void>;
-  getSBITaxSaverfd: () => Promise<void>;
-  getSBIrd: () => Promise<void>;
-  getSBIppf: () => Promise<void>;
-  getSBInps: () => Promise<void>;
-  getSBIUnnatiCard: () => Promise<void>;
-  getSBISimplySave: () => Promise<void>;
-  getKotakSavings: () => Promise<void>;
-  getHDFCSavings: () => Promise<void>;
-  getHDFCDigiSavings: () => Promise<void>;
-  getHDFCMaxSavings: () => Promise<void>;
-  getHDFCFD: () => Promise<void>;
-  getICICISavings: () => Promise<void>;
-  getICICIBasicSavings: () => Promise<void>;
-  getICICIYoungSavings: () => Promise<void>;
-  getICICIFD: () => Promise<void>;
-  getICICIrd: () => Promise<void>;
-  getkotakace: () => Promise<void>;
+	// Async Actions
+	getSBISavings: () => Promise<void>;
+	getSBIfd: () => Promise<void>;
+	getSBITaxSaverfd: () => Promise<void>;
+	getSBIrd: () => Promise<void>;
+	getSBIppf: () => Promise<void>;
+	getSBInps: () => Promise<void>;
+	getSBIUnnatiCard: () => Promise<void>;
+	getSBISimplySave: () => Promise<void>;
+	getKotakSavings: () => Promise<void>;
+	getHDFCSavings: () => Promise<void>;
+	getHDFCDigiSavings: () => Promise<void>;
+	getHDFCMaxSavings: () => Promise<void>;
+	getHDFCFD: () => Promise<void>;
+	getICICISavings: () => Promise<void>;
+	getICICIBasicSavings: () => Promise<void>;
+	getICICIYoungSavings: () => Promise<void>;
+	getICICIFD: () => Promise<void>;
+	getICICIrd: () => Promise<void>;
+	getkotakace: () => Promise<void>;
+	getHDFCrd: () => Promise<void>;
 	getHDFCmoney: () => Promise<void>;
 }
 
@@ -115,6 +118,8 @@ export const useMessagesStore = create<MessageStore>((set, get) => ({
 	seticicird: (data: any) => set({ icicird: data }),
 	kotakace: [],
 	setkotakace: (data: any) => set({ kotakace: data }),
+	hdfcrd: [],
+	sethdfcrd: (data: any) => set({ hdfcrd: data }),
 	hdfcmoney: [],
 	sethdfcmoney: (data: any) => set({ hdfcmoney: data }),
 
@@ -374,6 +379,18 @@ export const useMessagesStore = create<MessageStore>((set, get) => ({
 		}
 		catch (error) {
 			console.error('Error fetching Moneyback data:', error);
+		}
+	},
+
+	getHDFCrd: async () => {
+		try {
+			const res = await instance.get('/hdfc/rd');
+			if (res.data) {
+				set({ hdfcrd: res.data });
+			}
+		}
+		catch (error) {
+			console.error('Error fetching RD data:', error);
 		}
 	},
 

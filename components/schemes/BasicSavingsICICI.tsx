@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useMessagesStore } from '../store/SBIStore';
+import Navbar from '../uiComponents/Navbar';
+import Footer from '../uiComponents/Footer';
 
 
 
@@ -8,19 +10,19 @@ const ICICIBasicSavings = () => {
   const [activeTab, setActiveTab] = useState({});
 
   useEffect(() => {
-     getICICIBasicSavings();
+    getICICIBasicSavings();
   }, []);
 
   const tabNames = ['Know Before You Invest', 'Key Features', 'Eligibility'];
 
-  const getTabContent = (product, tab) => {
+  const getTabContent = (product: any, tab: any) => {
     switch (tab) {
       case 'Know Before You Invest':
         return product.description;
       case 'Key Features':
         return Array.isArray(product.features) ? (
           <ul className="list-disc pl-5 space-y-1">
-            {product.features.map((f, i) => (
+            {product.features.map((f: any, i: any) => (
               <li key={i}>{f}</li>
             ))}
           </ul>
@@ -61,11 +63,10 @@ const ICICIBasicSavings = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab({ ...activeTab, [index]: tab })}
-                    className={`text-left px-4 py-2 rounded-md font-medium ${
-                      selectedTab === tab
+                    className={`text-left px-4 py-2 rounded-md font-medium ${selectedTab === tab
                         ? 'bg-yellow-400 text-black shadow-sm'
                         : 'hover:bg-gray-200 text-blue-700'
-                    }`}
+                      }`}
                   >
                     {tab}
                   </button>
