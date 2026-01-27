@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "../lib/axios.js";
+import axios from "../lib/axios";
 import Link from "next/link";
 import { ParamValue } from "next/dist/server/request/params.js";
 import { useRouter } from "next/navigation.js";

@@ -231,7 +231,7 @@ export default function Navbar() {
 				</header>
 				:
 				<div>
-					<header className="flex flex-col sm:flex-row justify-between items-center px-4 sm:px-10 lg:px-16 py-3 sm:py-6 bg-[#f7fafc]">
+					<header className="flex flex-col sm:flex-row justify-between items-center px-4 sm:px-10 lg:px-16 py-3 sm:py-6 bg-white border-b border-gray-100">
 						<div className="flex items-center justify-between w-full sm:w-auto mb-4 sm:mb-0">
 							<div onClick={() => router.push('/')} className="flex flex-col items-center font-bold text-lg max-w-50 overflow-hidden whitespace-nowrap cursor-pointer">
 								<SmartImage
@@ -253,11 +253,11 @@ export default function Navbar() {
 								</svg>
 							</button>
 						</div>
-						<nav role="navigation" aria-label="Main navigation" className="hidden sm:flex flex-wrap items-center justify-center sm:justify-end gap-6">
-							<Link href="/courses" aria-label="View courses" className={`w-28 h-10 text-base flex items-center justify-center border-none rounded-full cursor-pointer shadow-sm font-medium transition-colors ${pathname.startsWith('/courses') ? 'bg-amber-400 text-white' : 'bg-white text-gray-700 hover:bg-gray-200'}`}>Courses</Link>
-							<Link href="/articles" aria-label="View articles" className={`w-28 h-10 text-base flex items-center justify-center border-none rounded-full cursor-pointer shadow-sm font-medium transition-colors ${pathname === '/articles' ? 'bg-amber-400 text-white' : 'bg-white text-gray-700 hover:bg-gray-200'}`}>Articles</Link>
-							<Link href="/about" aria-label="About us" className={`w-28 h-10 text-base flex items-center justify-center border-none rounded-full cursor-pointer shadow-sm font-medium transition-colors ${pathname === '/about' ? 'bg-amber-400 text-white' : 'bg-white text-gray-700 hover:bg-gray-200'}`}>About Us</Link>
-							<button onClick={loginWithPopup} className="px-5 py-2 bg-amber-400 text-white rounded-md font-bold hover:bg-amber-500 transition-colors duration-200 text-base sm:text-lg cursor-pointer">Sign up / Login</button>
+						<nav role="navigation" aria-label="Main navigation" className="hidden sm:flex flex-wrap items-center justify-center sm:justify-end gap-10">
+							<Link href="/courses" aria-label="View courses" className={`text-lg flex items-center justify-center border-none cursor-pointer font-semibold transition-colors ${pathname.startsWith('/courses') ? 'text-amber-400' : 'text-gray-800 hover:text-gray-600'}`}>Courses</Link>
+							<Link href="/articles" aria-label="View articles" className={`text-lg flex items-center justify-center border-none cursor-pointer font-semibold transition-colors ${pathname === '/articles' ? 'text-amber-400' : 'text-gray-800 hover:text-gray-600'}`}>Articles</Link>
+							<Link href="/about" aria-label="About us" className={`text-lg flex items-center justify-center border-none cursor-pointer font-semibold transition-colors ${pathname === '/about' ? 'text-amber-400' : 'text-gray-800 hover:text-gray-600'}`}>About Us</Link>
+							<button onClick={loginWithPopup} className="px-8 py-3 bg-[#FFB800] text-white rounded-lg font-bold hover:bg-[#E6A600] transition-colors duration-200 text-lg cursor-pointer shadow-md">Sign up / Login</button>
 						</nav>
 					</header>
 					<div className={`fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out sm:hidden z-50`}>
@@ -270,10 +270,10 @@ export default function Navbar() {
 							</button>
 						</div>
 						<nav role="navigation" aria-label="Mobile navigation" className="flex flex-col p-5 space-y-5">
-							<Link href="/courses" aria-label="View courses" className="text-gray-800 font-medium hover:text-blue-700 transition-colors duration-200 text-lg" onClick={toggleSidebar}>Courses</Link>
-							<Link href="/articles" aria-label="View articles" className="text-gray-800 font-medium hover:text-blue-700 transition-colors duration-200 text-lg" onClick={toggleSidebar}>Articles</Link>
-							<Link href="/about" aria-label="About us" className="text-gray-800 font-medium hover:text-blue-700 transition-colors duration-200 text-lg" onClick={toggleSidebar}>About Us</Link>
-							<button onClick={() => { loginWithPopup(); toggleSidebar(); }} className="px-5 py-2 bg-amber-400 text-white rounded-lg font-bold hover:bg-amber-500 transition-colors duration-200 text-lg cursor-pointer">Sign up / Login</button>
+							<Link href="/courses" aria-label="View courses" className="text-gray-800 font-semibold hover:text-blue-700 transition-colors duration-200 text-lg" onClick={toggleSidebar}>Courses</Link>
+							<Link href="/articles" aria-label="View articles" className="text-gray-800 font-semibold hover:text-blue-700 transition-colors duration-200 text-lg" onClick={toggleSidebar}>Articles</Link>
+							<Link href="/about" aria-label="About us" className="text-gray-800 font-semibold hover:text-blue-700 transition-colors duration-200 text-lg" onClick={toggleSidebar}>About Us</Link>
+							<button onClick={() => { loginWithPopup(); toggleSidebar(); }} className="px-5 py-3 bg-[#FFB800] text-white rounded-lg font-bold hover:bg-[#E6A600] transition-colors duration-200 text-lg cursor-pointer">Sign up / Login</button>
 						</nav>
 					</div>
 					{isSidebarOpen && (
