@@ -6,7 +6,7 @@ const Footer = dynamic(() => import('./Footer'))
 
 export default function FooterLayout() {
   const pathname = usePathname();
-  const routesWithoutFooter = [ '/signin', '/signup', '/admin'];
+  const routesWithoutFooter = ['/signin', '/signup', '/admin', '/onboarding'];
   const hideLayout = routesWithoutFooter.some(route => pathname.includes(route))
 
   return (

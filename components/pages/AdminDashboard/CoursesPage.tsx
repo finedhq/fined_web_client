@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import instance from "../../lib/axios"
 import Loader from "../../uiComponents/Loader";

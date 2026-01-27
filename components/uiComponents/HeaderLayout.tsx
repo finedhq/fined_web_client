@@ -6,7 +6,7 @@ const Navbar = dynamic(() => import('./Navbar'))
 
 export default function HeaderLayout() {
   const pathname = usePathname();
-  const routesWithoutFooter = [ '/signin', '/signup', '/admin'];
+  const routesWithoutFooter = ['/signin', '/signup', '/admin', '/onboarding'];
   const hideLayout = routesWithoutFooter.some(route => pathname.includes(route))
 
   return (

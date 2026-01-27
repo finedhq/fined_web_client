@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import axios from '../../lib/axios.js';
+import axios from '../../lib/axios';
 import Loader from "../../uiComponents/Loader";
 import { ParamValue } from 'next/dist/server/request/params';
 import { useRouter } from 'next/navigation';

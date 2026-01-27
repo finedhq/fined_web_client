@@ -170,7 +170,7 @@ export default function LandingPage() {
   }, [courses, articles]);
 
   return (
-    <div className="min-h-screen bg-gray-100 pb-5 text-gray-800 font-inter">
+    <div className="min-h-screen bg-white pb-5 text-gray-800 font-inter">
       <style>
         {`
           .hide-scrollbar::-webkit-scrollbar {
@@ -207,18 +207,27 @@ export default function LandingPage() {
         `}
       </style>
 
-      <main className="flex flex-col lg:flex-row justify-between items-center px-6 sm:px-10 lg:px-16 py-12 sm:py-16 lg:py-20">
+      <main className="flex flex-col lg:flex-row justify-between items-center px-6 sm:px-10 lg:px-24 py-12 sm:py-24 lg:py-32 gap-12">
         <div className="max-w-full lg:max-w-xl mb-10 lg:mb-0">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl mb-5 font-semibold text-center lg:text-left leading-tight">Take Control of Your Financial Future—For Free</h1>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 text-center lg:text-left">
+          <p className="text-lg sm:text-xl lg:text-2xl text-gray-500 text-center lg:text-left mb-12 max-w-lg">
             FinEd simplifies finance with bite-sized, engaging courses designed to help you save more, invest smarter, and take control of your money - all for free!
           </p>
+          <div className="flex justify-center lg:justify-start">
+            <Link
+              href="/onboarding/welcome"
+              className="bg-[#6366F1] text-white py-5 px-10 rounded-full font-bold flex items-center gap-3 hover:bg-[#4F46E5] transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1 text-xl group"
+            >
+              <span>New to FinEd? Here’s how you can get started</span>
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
+            </Link>
+          </div>
         </div>
-        <div className="w-full lg:w-150 flex justify-center">
+        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
           <img
             src="/landing1.png"
-            alt="Code preview"
-            className="w-full max-w-150 rounded-2xl shadow-xl object-contain"
+            alt="Dashboard Preview"
+            className="w-full max-w-2xl rounded-3xl shadow-2xl object-contain"
           />
         </div>
       </main>
