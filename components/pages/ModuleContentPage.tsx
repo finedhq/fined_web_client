@@ -9,7 +9,35 @@ import { Params } from 'next/dist/server/request/params'
 import { useRouter } from 'next/navigation'
 import { useUser } from '@auth0/nextjs-auth0';
 
-const ModuleContentPage = ({ params } : { params: Params}) => {
+const getPoints = (index: number) => index + 1; // A=1, B=2, C=3, D=4 
+
+const getFinancialProfile = (totalScore: number) => {
+  if (totalScore <= 7) return {
+    type: "Comfort Seeker",
+    goal: "Build security and avoid risk",
+    products: ["High-interest savings", "Emergency fund", "Fixed Deposits (FDs)"]
+  }; // [cite: 31, 37, 38, 39, 40, 41]
+
+  if (totalScore <= 10) return {
+    type: "Disciplined Planner",
+    goal: "Organise and plan money efficiently",
+    products: ["Recurring Deposit (RD)", "Goal-based savings", "Starter SIP"]
+  }; // [cite: 32, 44, 45, 46, 47]
+
+  if (totalScore <= 14) return {
+    type: "Balanced Spender",
+    goal: "Balance lifestyle and savings",
+    products: ["Hybrid mutual funds", "Automated savings", "Liquid funds"]
+  }; // [cite: 33, 50, 51, 52, 54]
+
+  return {
+    type: "Future Builder",
+    goal: "Long-term wealth creation",
+    products: ["Equity mutual funds / SIP", "Index funds", "ELSS (tax saving)"]
+  }; // [cite: 34, 57, 58, 59, 60]
+};
+
+const ModuleContentPage = ({ params }: { params: Params }) => {
 
   const router = useRouter()
 
@@ -34,22 +62,25 @@ const ModuleContentPage = ({ params } : { params: Params}) => {
   const [warning, setWarning] = useState("")
 
   const [localCompletedCards, setLocalCompletedCards] = useState<Record<string, any>>({})
+  console.log('local: ', localCompletedCards)
 
-   useEffect(() => {
+  const [showResult, setShowResult] = useState(false);
+  const [finalProfile, setFinalProfile] = useState<any>(null);
+
+  useEffect(() => {
     if (isLoading || !isAuthenticated) return;
- 
+
     fetch("/api/auth/me")
       .then(res => res.json())
       .then(data => {
-      console.log("Data from /api/me: ",data);
-      setrole(data.roles?.[0] || "");
+        console.log("Data from /api/me: ", data);
+        setEmail(user.email || '')
+        setrole(data.roles?.[0] || "");
       })
       .catch(() => setrole(""));
-      
+
   }, [isLoading, isAuthenticated]);
-  useEffect(() => {
-    console.log("Role updated:", role);
-  }, [role]);
+
   async function fetchCard() {
     try {
       const res = await instance.post(`/courses/course/${courseId}/module/${moduleId}/card/${cardId}`, { email })
@@ -118,9 +149,9 @@ const ModuleContentPage = ({ params } : { params: Params}) => {
       }
       if (!nextCardId && !nextModuleCard && isLastCardInModule) {
         toast.success("🎉 You've completed the entire course!")
-        setTimeout(() => {
-          router.push(`/home/?courseId=${courseId}`)
-        }, 1500)
+        // setTimeout(() => {
+        //   router.push(`/home/?courseId=${courseId}`)
+        // }, 1500)
       }
     } catch (err) {
       setWarning("Failed to update course card.")
@@ -140,6 +171,14 @@ const ModuleContentPage = ({ params } : { params: Params}) => {
   async function checkIsCorrect(index: number) {
     if (disabled) return;
 
+    // 1. Calculate points for this answer
+    const points = getPoints(index);
+
+    // 2. Update session storage score
+    const currentTotal = parseInt(sessionStorage.getItem('quiz_score') || '0');
+    const newTotal = currentTotal + points;
+    sessionStorage.setItem('quiz_score', newTotal.toString());
+
     const selectedOption = card.options[index]
     setSelectedIndex(index)
     setDisabled(true)
@@ -148,6 +187,14 @@ const ModuleContentPage = ({ params } : { params: Params}) => {
       await markCompleted(selectedOption, index)
     } else {
       setLocalCompletedCards(prev => ({ ...prev, [cardId as string]: true }))
+    }
+
+    if (!nextCardId && !nextModuleCard && isLastCardInModule) {
+      const profile = getFinancialProfile(newTotal);
+      setFinalProfile(profile);
+      setShowResult(true);
+      // Clear session storage after showing result if desired
+      sessionStorage.removeItem('quiz_score');
     }
   }
 
@@ -386,6 +433,42 @@ const ModuleContentPage = ({ params } : { params: Params}) => {
             </div>
           </div>
         )}
+
+      {showResult && finalProfile && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center">
+            <h2 className="text-sm uppercase tracking-widest text-indigo-600 font-bold mb-2">Your Financial Personality</h2>
+            <h3 className="text-3xl font-extrabold text-gray-900 mb-4">{finalProfile.type}</h3>
+
+            <div className="bg-indigo-50 p-4 rounded-xl mb-6">
+              <p className="text-sm text-indigo-800 font-semibold mb-1">Primary Goal</p>
+              <p className="text-gray-700">{finalProfile.goal}</p>
+            </div>
+
+            <div className="text-left mb-8">
+              <p className="text-sm font-bold text-gray-500 mb-3 ml-1">Recommended for you:</p>
+              <ul className="space-y-2">
+                {finalProfile.products.map((p: string, i: number) => (
+                  <li key={i} className="flex items-center gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                    <span className="text-green-500">✔</span> {p}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <button
+              onClick={() => {
+                sessionStorage.removeItem('quiz_score');
+                router.push(`/home/?courseId=${courseId}`);
+              }}
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all"
+            >
+              Finish Journey
+            </button>
+          </div>
+        </div>
+      )}
+
       {warning && (
         <div className="fixed inset-0 z-20 bg-black/40 flex items-center justify-center">
           <div className="bg-white p-6 rounded-2xl shadow-xl w-125 space-y-4">

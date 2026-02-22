@@ -26,7 +26,8 @@ const HelpPage = () => {
       .then(res => res.json())
       .then(data => {
       console.log("Data from /api/me: ",data);
-      setrole(data.roles?.[0] || "");
+      setEmail(user.email || '')
+        setrole(data.roles?.[0] || "");
       })
       .catch(() => setrole(""));
       

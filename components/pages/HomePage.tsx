@@ -39,17 +39,18 @@ const HomePage = () => {
   const [showDescription, setShowDescription] = useState(false)
   const [course_id, setCourseId] = useState("")
 
-   useEffect(() => {
+  useEffect(() => {
     if (isLoading || !isAuthenticated) return;
- 
+
     fetch("/api/auth/me")
       .then(res => res.json())
       .then(data => {
-      console.log("Data from /api/me: ",data);
-      setrole(data.roles?.[0] || "");
+        console.log("Data from /api/me: ", data);
+        setEmail(user.email || '')
+        setrole(data.roles?.[0] || "");
       })
       .catch(() => setrole(""));
-      
+
   }, [isLoading, isAuthenticated]);
   useEffect(() => {
     console.log("Role updated:", role);
@@ -95,6 +96,7 @@ const HomePage = () => {
     setLoading(true);
     try {
       const res = await instance.post("/home/getdata", { email, userId: user?.sub });
+      console.log(res.data?.userData)
       if (res.data?.userData) {
         setUserData(res.data.userData);
         setFeaturedArticle(res.data.featuredArticle);
@@ -112,6 +114,7 @@ const HomePage = () => {
   }
 
   useEffect(() => {
+    console.log('email: ', email, 'user email: ', user?.email, isAuthenticated)
     if (!email) return;
     fetchData();
   }, [email]);

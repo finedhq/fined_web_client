@@ -15,17 +15,17 @@ const CoursesPage = () => {
   const isAuthenticated = !!user;
   const [role, setrole] = useState("")
 
-useEffect(() => {
+  useEffect(() => {
     if (isLoading || !isAuthenticated) return;
 
     fetch("/api/auth/me")
       .then(res => res.json())
       .then(data => {
-      console.log("Data from /api/me: ",data);
-      setrole(data.roles?.[0] || "");
+        console.log("Data from /api/me: ", data);
+        setrole(data.roles?.[0] || "");
       })
       .catch(() => setrole(""));
-      
+
   }, [isLoading, isAuthenticated]);
   useEffect(() => {
     console.log("Role updated:", role);

@@ -35,17 +35,20 @@ export default function CourseOverviewPage({ courseId }: { courseId: ParamValue 
   const [isSaved, setIsSaved] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-   useEffect(() => {
+  console.log('course: ', course);
+
+  useEffect(() => {
     if (isLoading || !isAuthenticated) return;
- 
+
     fetch("/api/auth/me")
       .then(res => res.json())
       .then(data => {
-      console.log("Data from /api/me: ",data);
-      setRole(data.roles?.[0] || "");
+        console.log("Data from /api/me: ", data);
+        setEmail(user.email || '')
+        setRole(data.roles?.[0] || "");
       })
       .catch(() => setRole(""));
-      
+
   }, [isLoading, isAuthenticated]);
   useEffect(() => {
     console.log("Role updated:", role);
@@ -183,7 +186,8 @@ export default function CourseOverviewPage({ courseId }: { courseId: ParamValue 
                         <button
                           onClick={() => {
                             if (isClickable) {
-                              router.push(`module/${module.moduleId}/card/${card.card_id}`);
+                              sessionStorage.removeItem('quiz_score');
+                              router.push(`/courses/course/${courseId}/module/${module.moduleId}/card/${card.card_id}`);
                             } else {
                               setShowLockedAlert(true);
                             }
