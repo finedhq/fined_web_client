@@ -35,14 +35,21 @@ export default function CourseOverviewPage({ courseId }: { courseId: ParamValue 
   const [isSaved, setIsSaved] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      setEmail(user?.email || "");
-      setHasUser(true);
-      const roles = user?.["https://fined.com/roles"];
-      setRole(roles?.[0] || "");
-    }
+   useEffect(() => {
+    if (isLoading || !isAuthenticated) return;
+ 
+    fetch("/api/auth/me")
+      .then(res => res.json())
+      .then(data => {
+      console.log("Data from /api/me: ",data);
+      setRole(data.roles?.[0] || "");
+      })
+      .catch(() => setRole(""));
+      
   }, [isLoading, isAuthenticated]);
+  useEffect(() => {
+    console.log("Role updated:", role);
+  }, [role]);
 
   async function fetchCourse() {
     setLoading(true);

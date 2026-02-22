@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useMessagesStore } from "../store/SBIStore";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "../uiComponents/Navbar";
+import Footer from "../uiComponents/Footer";
 
 const SimplySaveCardList = () => {
   const { getSBISimplySave, simplysave } = useMessagesStore();
@@ -75,11 +75,10 @@ const SimplySaveCardList = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab({ ...activeTab, [index]: tab })}
-                    className={`text-left px-4 py-2 rounded-md font-medium ${
-                      selectedTab === tab
+                    className={`text-left px-4 py-2 rounded-md font-medium ${selectedTab === tab
                         ? "bg-yellow-400 text-black shadow-sm"
                         : "hover:bg-gray-200 text-blue-700"
-                    }`}
+                      }`}
                   >
                     {tab}
                   </button>
