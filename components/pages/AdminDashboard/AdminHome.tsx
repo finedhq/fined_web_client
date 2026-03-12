@@ -12,14 +12,20 @@ const AdminHome = () => {
   const [role, setrole] = useState("")
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push("/")
-    } else if (!isLoading && isAuthenticated) {
-      const roles = user?.["https://fined.com/roles"]
-      setrole(roles?.[0] || "")
-      if (roles?.[0] !== "Admin") router.push("/")
-    }
-  }, [isLoading, isAuthenticated])
+    if (isLoading || !isAuthenticated) return;
+
+    fetch("/api/auth/me")
+      .then(res => res.json())
+      .then(data => {
+        console.log("Data from /api/me: ", data);
+        setrole(data.roles?.[0] || "");
+      })
+      .catch(() => setrole(""));
+
+  }, [isLoading, isAuthenticated]);
+  useEffect(() => {
+    console.log("Role updated:", role);
+  }, [role]);
 
   const cards = [
     {

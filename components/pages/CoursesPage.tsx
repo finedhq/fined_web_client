@@ -32,13 +32,22 @@ export default function CoursesHomePage() {
 	const [isSaved, setIsSaved] = useState(false)
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
-	useEffect(() => {
-		if (!isLoading && isAuthenticated) {
-			setEmail(user?.email || "")
-			const roles = user?.["https://fined.com/roles"]
-			setrole(roles?.[0] || "")
-		}
-	}, [isLoading, isAuthenticated])
+	 useEffect(() => {
+    if (isLoading || !isAuthenticated) return;
+ 
+    fetch("/api/auth/me")
+      .then(res => res.json())
+      .then(data => {
+      console.log("Data from /api/me: ",data);
+      setEmail(user.email || '')
+        setrole(data.roles?.[0] || "");
+      })
+      .catch(() => setrole(""));
+      
+  }, [isLoading, isAuthenticated]);
+  useEffect(() => {
+    console.log("Role updated:", role);
+  }, [role]);
 
 	async function fetchCourses() {
 		setLoading(true)
@@ -299,7 +308,7 @@ export default function CoursesHomePage() {
 												</div>
 												<div className="w-full" >
 													<button
-														onClick={() => router.push(`course/${ongoingCourse?.id || courses[courses.length - 1]?.id}`)}
+														onClick={() => router.push(`/courses/course/${ongoingCourse?.id || courses[courses.length - 1]?.id}`)}
 														className="bg-amber-400 text-white px-4 py-1 w-full sm:px-4 sm:py-2 rounded-full self-end mt-2 cursor-pointer"
 													>
 														{ongoingCourse?.id ? "Continue" : "Start Now"}
@@ -436,7 +445,7 @@ function CourseCard({ course, isAuthenticated }: { course: any; isAuthenticated:
 		<div
 			onClick={() => {
 				if (isAuthenticated) {
-					router.push(`course/${course.id}`);
+					router.push(`/courses/course/${course.id}`);
 				} else {
 					toast.error("Please sign in");
 				}

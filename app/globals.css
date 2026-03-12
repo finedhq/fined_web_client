@@ -3,6 +3,8 @@
 
 @import "tailwindcss";
 
+@plugin "@tailwindcss/typography";
+
 :root {
   --background: #f3f4f6;
   --foreground: #1e2939;
@@ -92,4 +94,20 @@ body {
   to {
     opacity: 0;
   }
+}
+
+/* global.css */
+.prose img {
+  border-radius: 0.5rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.prose a {
+  color: #6366f1; /* Indigo-500 to match your theme */
+  text-decoration: none;
+}
+
+.prose a:hover {
+  text-decoration: underline;
 }

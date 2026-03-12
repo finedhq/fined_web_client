@@ -19,12 +19,21 @@ export default function Footer() {
 	const [isEnteredEmail, setIsEnteredEmail] = useState(false)
 
 	useEffect(() => {
-		if (!isLoading && isAuthenticated) {
-			setEmail(user?.email || "")
-			const roles = user?.["https://fined.com/roles"]
-			setrole(roles?.[0] || "")
-		}
-	}, [isLoading, isAuthenticated])
+		if (isLoading || !isAuthenticated) return;
+
+		fetch("/api/auth/me")
+			.then(res => res.json())
+			.then(data => {
+				console.log("Data from /api/me: ", data);
+				setEmail(user.email || '')
+				setrole(data.roles?.[0] || "");
+			})
+			.catch(() => setrole(""));
+
+	}, [isLoading, isAuthenticated]);
+	useEffect(() => {
+		console.log("Role updated:", role);
+	}, [role]);
 
 	async function fetchEnteredEmail() {
 		try {

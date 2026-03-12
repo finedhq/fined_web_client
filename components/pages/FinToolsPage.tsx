@@ -42,16 +42,22 @@ export default function FinToolsPage() {
 
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
-	useEffect(() => {
-		if (!isLoading && !isAuthenticated) {
-			router.push("/")
-		} else if (!isLoading && isAuthenticated) {
-			setEmail(user?.email || "")
-			const roles = user?.["https://fined.com/roles"]
-			setrole(roles?.[0] || "")
-		}
-	}, [isLoading, isAuthenticated])
-
+	 useEffect(() => {
+    if (isLoading || !isAuthenticated) return;
+ 
+    fetch("/api/auth/me")
+      .then(res => res.json())
+      .then(data => {
+      console.log("Data from /api/me: ",data);
+      setEmail(user.email || '')
+        setrole(data.roles?.[0] || "");
+      })
+      .catch(() => setrole(""));
+      
+  }, [isLoading, isAuthenticated]);
+  useEffect(() => {
+    console.log("Role updated:", role);
+  }, [role]);
 	async function fetchHasUnseen() {
 		try {
 			const res = await instance.post("/home/hasunseen", { email })

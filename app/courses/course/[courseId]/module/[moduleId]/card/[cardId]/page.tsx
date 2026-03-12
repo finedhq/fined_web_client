@@ -1,7 +1,7 @@
 'use client';
 
-import { useParams } from "next/navigation";
 import ModuleContentPage from "@/components/pages/ModuleContentPage";
+import { useParams } from "next/navigation";
 
 export default function ModuleContent() {
   const params = useParams();

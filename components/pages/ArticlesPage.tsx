@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation';
 import { useUser } from '@auth0/nextjs-auth0';
 import SmartImage from '../uiComponents/SmartImage';
+import { RichTextViewer } from '../uiComponents/RichTextViewer';
 
 const ArticlesPage = () => {
   const router = useRouter()
@@ -48,12 +49,21 @@ const ArticlesPage = () => {
   const [error, setError] = useState("")
 
   useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      setEmail(user?.email || "");
-      const roles = user?.["https://fined.com/roles"];
-      setrole(roles?.[0] || "");
-    }
+    if (isLoading || !isAuthenticated) return;
+
+    fetch("/api/auth/me")
+      .then(res => res.json())
+      .then(data => {
+        console.log("Data from /api/me: ", data);
+        setEmail(user?.email || '')
+        setrole(data.roles?.[0] || "");
+      })
+      .catch(() => setrole(""));
+
   }, [isLoading, isAuthenticated]);
+  useEffect(() => {
+    console.log("Role updated:", role);
+  }, [role]);
 
   const checkScroll = (el: HTMLDivElement | null, setLeft: React.Dispatch<React.SetStateAction<boolean>>, setRight: React.Dispatch<React.SetStateAction<boolean>>) => {
     if (!el) return;
@@ -401,7 +411,7 @@ const ArticlesPage = () => {
                 </div>
                 <div className="p-6">
                   <h2 className="text-base sm:text-xl font-semibold text-gray-900 mb-2">{articles[0]?.title || ""}</h2>
-                  <p className="text-gray-600 text-justify text-sm max-h-10 overflow-hidden">{articles[0]?.content || ""}</p>
+                  <div className="text-gray-600 text-justify text-sm max-h-10 overflow-hidden"><RichTextViewer content={articles[0]?.content || ""} /></div>
                   <p className='text-gray-600 text-sm mb-4' >[ . . . ]</p>
                   <p className="text-xs text-gray-400">{new Date(articles[0]?.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || ""}</p>
                 </div>
@@ -445,7 +455,7 @@ const ArticlesPage = () => {
                       <div>
                         <p className="text-[10px] sm:text-xs text-gray-400 sm:mb-1">{new Date(article?.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || ""}</p>
                         <h3 className="text-xs sm:text-lg font-semibold text-gray-900 mb-1">{article?.title || ""}</h3>
-                        <p className="text-gray-600 text-justify text-[10px] sm:text-sm max-h-8 sm:max-h-16 overflow-hidden">{articles[0]?.content || ""}</p>
+                        <div className="text-gray-600 text-justify text-[10px] sm:text-sm max-h-8 sm:max-h-16 overflow-hidden"><RichTextViewer content={articles[0]?.content || ""} /></div>
                         <p className='text-gray-600 text-[8px] sm:text-sm' >[ . . . ]</p>
                       </div>
                     </div>
@@ -571,7 +581,7 @@ const ArticlesPage = () => {
               </div>
               <div className="p-6">
                 <h2 className="text-base sm:text-xl font-semibold text-gray-900 mb-2">{articles[0]?.title || ""}</h2>
-                <p className="text-gray-600 text-justify text-sm max-h-10 overflow-hidden">{articles[0]?.content || ""}</p>
+                <div className="text-gray-600 text-justify text-sm max-h-10 overflow-hidden"><RichTextViewer content={articles[0]?.content || ""} /></div>
                 <p className='text-gray-600 text-sm mb-4' >[ . . . ]</p>
                 <p className="text-xs text-gray-400">{new Date(articles[0]?.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || ""}</p>
               </div>
@@ -615,7 +625,7 @@ const ArticlesPage = () => {
                     <div>
                       <p className="text-[10px] sm:text-xs text-gray-400 sm:mb-1">{new Date(article?.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || ""}</p>
                       <h3 className="text-xs sm:text-lg font-semibold text-gray-900 mb-1">{article?.title || ""}</h3>
-                      <p className="text-gray-600 text-justify text-[10px] sm:text-sm max-h-8 sm:max-h-16 sm:w-11/12 overflow-hidden">{articles[0]?.content || ""}</p>
+                      <div className="text-gray-600 text-justify text-[10px] sm:text-sm max-h-8 sm:max-h-16 sm:w-11/12 overflow-hidden"> <RichTextViewer content={articles[0]?.content || ""} /></div>
                       <p className='text-gray-600 text-[8px] sm:text-sm' >[ . . . ]</p>
                     </div>
                   </div>
@@ -791,7 +801,7 @@ const ArticlesPage = () => {
                 })}
               </p>
               <div className="text-base sm:text-lg text-gray-700 leading-relaxed whitespace-pre-line text-justify sm:font-medium">
-                {selectedArticle.content}
+                <RichTextViewer content={selectedArticle.content} />
               </div>
             </div>
             {(prefetchingNext || loading) && selectedIndex === articles.length - 1 && hasMore && (

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useMessagesStore } from "../store/SBIStore";
+import Navbar from "../uiComponents/Navbar";
+import Footer from "../uiComponents/Footer";
 
 const HDFCMoney = () => {
   const { getHDFCmoney, hdfcmoney } = useMessagesStore();
@@ -26,7 +28,7 @@ const HDFCMoney = () => {
             <ul className="list-disc pl-5 space-y-1">
               {Object.entries(product.features).map(([key, value], i) => (
                 <li key={i}>
-                  <strong>{key}</strong>: {value}
+                  <strong>{key}</strong>: {value as any}
                 </li>
               ))}
             </ul>
@@ -80,11 +82,10 @@ const HDFCMoney = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab({ ...activeTab, [index]: tab })}
-                    className={`text-left px-4 py-2 rounded-md font-medium ${
-                      selectedTab === tab
-                        ? "bg-yellow-400 text-black shadow-sm"
-                        : "hover:bg-gray-200 text-blue-700"
-                    }`}
+                    className={`text-left px-4 py-2 rounded-md font-medium ${selectedTab === tab
+                      ? "bg-yellow-400 text-black shadow-sm"
+                      : "hover:bg-gray-200 text-blue-700"
+                      }`}
                   >
                     {tab}
                   </button>

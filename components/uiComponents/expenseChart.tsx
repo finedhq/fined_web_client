@@ -15,7 +15,7 @@ export default function ExpensesPieChart({ data, filterMonthforPieChart, setFilt
     return transactionMonth === filterMonthforPieChart && item.type === "expense"
   })
   const groupedData = Object.values(
-    filtered.reduce((acc, curr) => {
+    filtered.reduce((acc: any, curr) => {
       const cat = curr.category
       const amt = Number(curr.amount) || 0
       if (!acc[cat]) {
@@ -27,9 +27,8 @@ export default function ExpensesPieChart({ data, filterMonthforPieChart, setFilt
     }, {})
   )
 
-  const hasData = groupedData.length > 0 && groupedData.reduce((sum, item) => sum + item.spent, 0) > 0
-
-  const renderCustomLabel = ({ value, percent }) => {
+  const hasData = groupedData.length > 0 && groupedData.reduce((sum, item: any) => sum + item.spent, 0) > 0
+  const renderCustomLabel = ({ value, percent }: any) => {
     const percentage = (percent * 100).toFixed(1)
     return `${percentage}% (Rs.${value})`
   }
