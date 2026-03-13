@@ -5,11 +5,12 @@ import React, { useEffect, useState } from 'react'
 import instance from '../lib/axios'
 import toast from 'react-hot-toast'
 import { useUser } from "@auth0/nextjs-auth0";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const PoliciesPage = () => {
 
 	const router = useRouter();
+	const searchParams = useSearchParams()
 
 	const { user, isLoading } = useUser();
 	const isAuthenticated = !!user;
@@ -36,12 +37,11 @@ const PoliciesPage = () => {
 	}, [role]);
 
 	useEffect(() => {
-		const query = new URLSearchParams(location.search)
-		const idFromQuery = query.get("courseId")
-		if (idFromQuery) {
-			setCourseId(idFromQuery)
-		}
-	}, [location.search])
+  const idFromQuery = searchParams.get("courseId")
+  if (idFromQuery) {
+    setCourseId(idFromQuery)
+  }
+}, [searchParams])
 
 
 	const fetchRecommendations = async () => {

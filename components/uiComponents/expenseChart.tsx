@@ -14,7 +14,7 @@ export default function ExpensesPieChart({ data, filterMonthforPieChart, setFilt
     const transactionMonth = new Date(item.date).toLocaleString('default', { month: 'long' })
     return transactionMonth === filterMonthforPieChart && item.type === "expense"
   })
-  const groupedData = Object.values(
+  const groupedData: any = Object.values(
     filtered.reduce((acc: any, curr) => {
       const cat = curr.category
       const amt = Number(curr.amount) || 0

@@ -5,7 +5,7 @@ import {
 } from 'recharts'
 
 export default function WorkingCapitalChart({ data, monthsRange, setMonthsRange }) {
-  const monthsList = [];
+  const monthsList: any = [];
   const now = new Date();
 
   // ✅ Generate last N months

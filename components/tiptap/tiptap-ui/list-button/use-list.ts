@@ -68,7 +68,7 @@ export const LIST_SHORTCUT_KEYS: Record<ListType, string> = {
  * Checks if a list can be toggled in the current editor state
  */
 export function canToggleList(
-  editor: Editor | null,
+  editor: Editor | null | any,
   type: ListType,
   turnInto: boolean = true
 ): boolean {
@@ -165,7 +165,7 @@ export function toggleList(editor: Editor | null, type: ListType): boolean {
 
     const selection = state.selection
 
-    let chain = editor.chain().focus()
+    let chain: any = editor.chain().focus()
 
     // Handle NodeSelection
     if (selection instanceof NodeSelection) {
